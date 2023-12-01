@@ -10,15 +10,16 @@ Use the repository [Discussions](https://github.com/Masharipov/TMFC_simulations/
 
 Here, we provide:
 
-1. [Task design files](task_designs) (.*mat format) containing stimulus onsets, durations, condition names, and weighting factors for synaptic matrices. Onsets, durations and names are defined in the same way as for **multiple conditions** *.mat file for SPM12.
+1. [Task design files](task_designs) (.*mat format) containing stimulus onsets, durations, condition names, and weighting factors for synaptic matrices. <br/>
+   **Onsets**, **durations** and **condition names** are defined in the same way as for **multiple conditions** *.mat file for SPM12.
   
-2. [Python code](python_code) for TMFC simulations based on **large-scale Wilson-Cowan neural mass model** and **Ballon-Windkessel haemodynamic model**.
+3. [Python code](python_code) for TMFC simulations based on **large-scale Wilson-Cowan neural mass model** and **Ballon-Windkessel haemodynamic model**.
 
-3. User-friendly [Jupyter notebooks](jupyter_notebooks) for reproducing our simulations.
+4. User-friendly [Jupyter notebooks](jupyter_notebooks) for reproducing our simulations.
 
-4. [Simulated BOLD time series files](simulated_BOLD_time_series) (*.mat format) for all experiments presented in the paper.
+5. [Simulated BOLD time series files](simulated_BOLD_time_series) (*.mat format) for all experiments presented in the paper.
 
-5. [MATLAB code](matlab_code) for TMFC analysis using:
+6. [MATLAB code](matlab_code) for TMFC analysis using:
     * correlation difference approach (**CorrDiff**),
     * standard psychophysiological interactions (**sPPI**),
     * generalised psychophysiological interactions (**gPPI**),
