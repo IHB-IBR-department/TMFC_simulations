@@ -19,7 +19,7 @@ Here, we provide:
 
 5. [Simulated BOLD time series files](simulated_BOLD_time_series) (*.mat format) for all experiments presented in the paper.
 
-6. [MATLAB code](matlab_code) for TMFC analysis using:
+6. SPM12-based [MATLAB code](matlab_code) for TMFC analysis using:
     * correlation difference approach (**CorrDiff**),
     * standard psychophysiological interactions (**sPPI**),
     * generalised psychophysiological interactions (**gPPI**),
