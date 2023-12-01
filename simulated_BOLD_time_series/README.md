@@ -11,7 +11,7 @@
    * Dummy scans: first 3 time points (6 s)
    * Total scan time = 13.3 min
 
-2. [SIM_BOLD 02_EVENT [2s_TR] [1s_DUR] [6s_ISI] [100_TRIALS]](/simulated_BOLD_time_series//SIM_BOLD_02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat)
+2. [SIM_BOLD 02_EVENT [2s_TR] [1s_DUR] [6s_ISI] [100_TRIALS]](/simulated_BOLD_time_series/SIM_BOLD_02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat)
    * Default event-related design
    * TR = 2 s
    * Event duration = 1 s
