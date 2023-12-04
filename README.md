@@ -70,6 +70,8 @@ In the last simulation experiment, we used **asymmetric** synaptic weight matric
 
 ## TMFC Analysis
 
+### Simulations without co-activations
+
 We first considered simulations without co-activations (SF = 0) to investigate whether different TMFC methods produce FC matrices similar to ground-truth synaptic weight matrices for a sample size N = 100, SNR = 0.4, and TR = 2 s. **pFDR < 0.001.**
 
 Correlation difference approach (**CorrDiff**):
@@ -93,19 +95,19 @@ Standard psychophysiological interactions (**sPPI**) **without deconvolution** (
 Generalised psychophysiological interactions (**gPPI**) **with deconvolution** (with and without gPPI matrix symmetrisation):
 
 <p align="center">
-<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_gPPI_with_deconv.png" width = 800>
+<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_gPPI_with_deconv.png" width = 950>
 </p>
 
 Generalised psychophysiological interactions (**gPPI**) **without deconvolution** (with and without gPPI matrix symmetrisation):
 
 <p align="center">
-<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_gPPI_without_deconv.png" width = 800>
+<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_gPPI_without_deconv.png" width = 950>
 </p>
 
 Beta-series correlations based on least-squares-all approach (**BSC-LSA**):
 
 <p align="center">
-<img src = "illustrations/event_related_design_no_coact_SF0_SNR04_N100_BSC_LSA.png" width = 600>
+<img src = "illustrations/event_related_design_no_coact_SF0_SNR04_N100_BSC_LSA.png" width = 650>
 </p>
 
 Beta-series correlations based on least-squares-separate approach (**BSC-LSS**):
@@ -122,9 +124,17 @@ Correlational psychophysiological interactions (**cPPI**):
 
 Task-state functional connectivity (**TSFC**) and background functional connectivity (**BGFC**):
 
+
 <p align="center">
 <img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_TSFC_BGFC.png" width = 400>
 </p>
 
+### Simulations with co-activations
+
+Next, we considered simulations with co-activations (SF = 1) to investigate how different TMFC methods address artificial inflation of TMFC estimates due to simultaneous activation of brain regions without task-related modulation of synaptic weights between them:
+
+<img src = "illustrations/ground_truth.png">
+
+Generalised psychophysiological interactions (**gPPI**) **without deconvolution** (e.g. gPPI without deconvolution is implemented in the FSL and CONN toolbox):
 
 
