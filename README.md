@@ -135,6 +135,6 @@ Next, we considered simulations with co-activations (SF = 1) to investigate how 
 
 <img src = "illustrations/ground_truth.png">
 
-Generalised psychophysiological interactions (**gPPI**) **without deconvolution** (e.g. gPPI without deconvolution is implemented in the FSL and CONN toolbox):
+**gPPI without deconvolution** (e.g. gPPI without deconvolution is implemented in the FSL and CONN toolbox):
 
 
