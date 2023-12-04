@@ -15,7 +15,7 @@ Here, we provide:
   
 3. [Python code](python_code) for TMFC simulations based on **large-scale Wilson-Cowan neural mass model** and **Ballon-Windkessel haemodynamic model**.
 
-4. User-friendly [Jupyter notebooks](jupyter_notebooks) for reproducing our simulations.
+4. User-friendly [Jupyter notebooks](jupyter_notebooks) for reproducing our simulations. **Input:** task design. **Output:** simulated BOLD time series.
 
 5. [Simulated BOLD time series files](simulated_BOLD_time_series) (*.mat format) for all experiments presented in the paper.
 
@@ -41,17 +41,90 @@ Gamma-band oscillations are linked to sensory processing<sup>[1](https://doi.org
 
 The simulation procedure included five steps:
   
-1. Simulation of gamma-band oscillatory neuronal activity for 100 interconnected brain regions using Wilson-Cowan equations. Synaptic weights between 100 brain regions depend on the task conditions, which allow to control the ground-truth TMFC. Transient activity-dependent modulation of synaptic strength, lasting from tens of milliseconds to several minutes, is referred to as short-term synaptic plasticity.
+1. Simulation of **gamma-band oscillatory neuronal activity** for 100 interconnected brain regions using **Wilson-Cowan equations**. Synaptic weights between 100 brain regions depend on the task conditions, which allow to control the ground-truth TMFC. Transient activity-dependent modulation of synaptic strength, lasting from tens of milliseconds to several minutes, is referred to as short-term synaptic plasticity<sup>[14](https://doi.org/10.1146/annurev.physiol.64.092501.114547)</sup>,<sup>[15](https://doi.org/10.1016/j.neuroimage.2009.11.015)[15]</sup>,<sup>[16](https://doi.org/10.1101/cshperspect.a005702)</sup>.
    
-2. Simulation of simple co-activations using box-car functions. Co-activations are simultaneous activations (task-evoked hemodynamic responses) without communication between brain regions.
+2. Simulation of **simple co-activations** using box-car functions. Co-activations are simultaneous activations (task-evoked hemodynamic responses) without communication between brain regions.
 
-3. Using the Balloon-Windkessel haemodynamic model to convert oscillatory neuronal activity and co-activations into BOLD signals.
+3. Using the **Balloon-Windkessel haemodynamic model** to convert oscillatory neuronal activity and co-activations into **BOLD signals**.
 
-4. Downsampling of the BOLD signal to different time resolutions.
+4. **Downsampling** of the BOLD signal to different time resolutions.
 
-5. Adding white Gaussian noise to model scanner measurement error. This step was done in MATLAB (see 'MATLAB_scripts' folder).
+5. Adding white **Gaussian noise** to model scanner measurement error. This step was done in MATLAB (see [MATLAB_code](matlab_code) folder).
+
+BOLD signal related to co-activations was normalised such that the ratio between the standard deviations of the oscillatory-related signal and co-activation-related signal was determined by the scaling factor:
+SF = σ<sub>oscill</sub>/<sub>σcoact</sub>.
+
+The signal-to-noise ratio (SNR) was defined as the ratio between the standard deviations of the signal and noise: SNR = σ<sub>signal</sub>/<sub>σnoise</sub>.
+
+Tasks consisted of **two task conditions (A and B)** interleaved by **rest** periods. By default, we considered **symmetric** synaptic weight matrices: 
+
+<p align="center">
+<img src = "illustrations/symmetric_synaptic_weights_and_PLV.png" width = 500>
+</p>
+
+In the last simulation experiment, we used **asymmetric** synaptic weight matrices to test whether the gPPI method could be used to obtain at least some information about the direction of connectivity:
+
+<p align="center">
+<img src = "illustrations/asymmetric_synaptic_weights_and_PLV.png" width = 500>
+</p>
 
 ## TMFC Analysis
+
+We first considered simulations without co-activations (SF = 0) to investigate whether different TMFC methods produce FC matrices similar to ground-truth synaptic weight matrices for a sample size N = 100, SNR = 0.4, and TR = 2 s. **pFDR < 0.001.**
+
+Correlation difference approach (**CorrDiff**):
+
+<p align="center">
+<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_corrdiff.png" width = 700>
+</p>
+
+Standard psychophysiological interactions (**sPPI**) **with deconvolution** (with and without sPPI matrix symmetrisation):
+
+<p align="center">
+<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_sPPI_with_deconv.png" width = 600>
+</p>
+
+Standard psychophysiological interactions (**sPPI**) **without deconvolution** (with and without sPPI matrix symmetrisation):
+
+<p align="center">
+<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_sPPI_without_deconv.png" width = 600>
+</p>
+
+Generalised psychophysiological interactions (**gPPI**) **with deconvolution** (with and without gPPI matrix symmetrisation):
+
+<p align="center">
+<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_gPPI_with_deconv.png" width = 800>
+</p>
+
+Generalised psychophysiological interactions (**gPPI**) **without deconvolution** (with and without gPPI matrix symmetrisation):
+
+<p align="center">
+<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_gPPI_without_deconv.png" width = 800>
+</p>
+
+Beta-series correlations based on least-squares-all approach (**BSC-LSA**):
+
+<p align="center">
+<img src = "illustrations/event_related_design_no_coact_SF0_SNR04_N100_BSC_LSA.png" width = 600>
+</p>
+
+Beta-series correlations based on least-squares-separate approach (**BSC-LSS**):
+
+<p align="center">
+<img src = "illustrations/event_related_design_no_coact_SF0_SNR04_N100_BSC_LSS.png" width = 600>
+</p>
+
+Correlational psychophysiological interactions (**cPPI**):
+
+<p align="center">
+<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_cPPI.png" width = 500>
+</p>
+
+Task-state functional connectivity (**TSFC**) and background functional connectivity (**BGFC**):
+
+<p align="center">
+<img src = "illustrations/block_design_no_coact_SF0_SNR04_N100_TSFC_BGFC.png" width = 400>
+</p>
 
 
 
