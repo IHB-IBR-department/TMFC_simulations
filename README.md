@@ -137,4 +137,14 @@ Next, we considered simulations with co-activations (SF = 1) to investigate how 
 
 **gPPI without deconvolution** (e.g. gPPI without deconvolution is implemented in the FSL and CONN toolbox):
 
+<img src = "illustrations/event_related_design_coact_SF1_SNR04_N100_gPPI_without_deconv_no_FIR.png">
+
+Here, we can see, that gPPI without deconvolution does not protect against co-activations.
+
+To isolate TMFC from co-activation effects, we can **regress out task activations** using finite impulse response (FIR) functions prior to TMFC analysis. **FIR task regression** substantially improves gPPI specificity:
+
+<img src = "illustrations/event_related_design_coact_SF1_SNR04_N100_gPPI_without_deconv_after_FIR.png">
+
+### Simulations with asymmetric synaptic weight matrices
+
 
