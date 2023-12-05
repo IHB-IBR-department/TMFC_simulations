@@ -147,4 +147,12 @@ To isolate TMFC from co-activation effects, we can **regress out task activation
 
 ### Simulations with asymmetric synaptic weight matrices
 
+Finally, we used **asymmetric** synaptic weight matrices to test whether the gPPI method has at least some causal interpretability. Asymmetric synaptic weight matrices should be reflected by **task-modulated effective connectivity (TMEC)**:
+
+<p align="center">
+<img src = "illustrations/ground_truth_asymmetric.png" width = 700>
+</p>
+
+The **regression dynamic causal modelling (rDCM)** method was used to demonstrate that the direction of information flow can, in principle, be inferred from the proposed type of simulation by means of an appropriate effective connectivity (EC) method. As rDCM requires a relatively high SNR, we used SNR = 5 here. If the gPPI method is unable to correctly evaluate the direction of information flow at a high SNR, then it would also fail at lower SNRs.
+
 
