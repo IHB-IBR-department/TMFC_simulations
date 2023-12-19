@@ -1,0 +1,149 @@
+function sPPI_and_gPPI_with_deconv_FIR(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth)
+
+% ========================================================================
+% Ruslan Masharipov, October, 2023
+% email: ruslan.s.masharipov@gmail.com
+% ========================================================================
+
+tic
+for subji = 1:N
+    load([stat_path filesep exp_folder filesep 'GLMs' filesep 'Sub_' num2str(subji,'%.3d') filesep  'PPI_FIR_ALL.mat']);
+
+    for j = 1:N_ROIs   
+        sPPI_design = [PPI_TaskA_vs_TaskB(:,j) VOI(:,j) Psy_TaskA_vs_TaskB ones(size(Psy_TaskA_vs_TaskB))];
+        gPPI_design = [PPI_TaskA(:,j) PPI_TaskB(:,j) VOI(:,j) Psy_TaskA Psy_TaskB ones(size(Psy_TaskA))];
+        
+        for k = 1:N_ROIs
+            if k==j
+                beta_coeff_sPPI(:,j,k) = NaN(4,1);
+                con_TaskA_vs_TaskB_sPPI(j,k) = NaN;
+                task_indep_sPPI(j,k) = NaN;
+                
+                beta_coeff_gPPI(:,j,k) = NaN(6,1); 
+                con_TaskA(j,k) = NaN;
+                con_TaskB(j,k) = NaN;
+                con_TaskA_vs_TaskB_gPPI(j,k) = NaN;
+                task_indep_gPPI(j,k) = NaN;
+            else
+                [b_sppi,bint,res] = regress(zscore(VOI(:,k)),sPPI_design);
+                [b_gppi,bint,res] = regress(zscore(VOI(:,k)),gPPI_design);
+                
+                beta_coeff_sPPI(:,j,k) = b_sppi;
+                con_TaskA_vs_TaskB_sPPI(j,k) = [1 0 0 0]*b_sppi;
+                task_indep_sPPI(j,k)   = [0 1 0 0]*b_sppi;
+                
+                beta_coeff_gPPI(:,j,k) = b_gppi;
+                con_TaskA(j,k) = [1 0 0 0 0 0]*b_gppi;
+                con_TaskB(j,k)   = [0 1 0 0 0 0]*b_gppi;
+                con_TaskA_vs_TaskB_gPPI(j,k) = [1 -1 0 0 0 0]*b_gppi;
+                task_indep_gPPI(j,k)   = [0 0 1 0 0 0]*b_gppi;
+            end
+        end
+    end
+   
+    save([stat_path filesep exp_folder filesep 'GLMs' filesep 'Sub_' num2str(subji,'%.3d') filesep 'sPPI_and_gPPI_with_Deconv_FIR.mat'], ...
+          'beta_*', 'con_*', 'task_indep_*');
+    time(subji)=toc;
+    fprintf(['sPPI and gPPI with deconvolution :: Subject #' num2str(subji) ' :: Done in: ' num2str(time(subji)) 's \n']);       
+    
+    clearvars -except stat_path exp_folder N N_ROIs q_level ground_truth
+end                        
+
+%% Merge matrices
+tic
+mkdir([stat_path filesep exp_folder filesep 'group_stat']);
+for subji = 1:N
+    load([stat_path filesep exp_folder filesep 'GLMs' filesep 'Sub_' num2str(subji,'%.3d') filesep 'sPPI_and_gPPI_with_Deconv_FIR.mat']);
+    sPPI_WD_TaskA_vs_TaskB_asymm(:,:,subji) = con_TaskA_vs_TaskB_sPPI;
+    sPPI_WD_TaskA_vs_TaskB_symm(:,:,subji) = (con_TaskA_vs_TaskB_sPPI + con_TaskA_vs_TaskB_sPPI')/2;
+    sPPI_WD_TaskIndep_asymm(:,:,subji) = task_indep_sPPI;
+    sPPI_WD_TaskIndep_symm(:,:,subji) = (task_indep_sPPI + task_indep_sPPI')/2;
+    
+    gPPI_WD_TaskA_asymm(:,:,subji) = con_TaskA;
+    gPPI_WD_TaskA_symm(:,:,subji) = (con_TaskA + con_TaskA')/2;
+    gPPI_WD_TaskB_asymm(:,:,subji) = con_TaskB;
+    gPPI_WD_TaskB_symm(:,:,subji) = (con_TaskB + con_TaskB')/2;
+    gPPI_WD_TaskA_vs_TaskB_asymm(:,:,subji) = con_TaskA_vs_TaskB_gPPI;
+    gPPI_WD_TaskA_vs_TaskB_symm(:,:,subji) = (con_TaskA_vs_TaskB_gPPI + con_TaskA_vs_TaskB_gPPI')/2;
+    gPPI_WD_TaskIndep_asymm(:,:,subji) = task_indep_gPPI;
+    gPPI_WD_TaskIndep_symm(:,:,subji) = (task_indep_gPPI + task_indep_gPPI')/2;
+end
+save([stat_path filesep exp_folder filesep 'group_stat' filesep 'sPPI_and_gPPI_with_Deconv_FIR.mat'],'sPPI*','gPPI*');
+time = toc;
+fprintf(['Merge sPPI_and_gPPI_with_Deconv matrices :: Done in: ' num2str(time) 's \n']);
+
+%% Results: sPPI with Deconv
+[sPPI_WD_TaskA_vs_TaskB_asymm_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(sPPI_WD_TaskA_vs_TaskB_asymm,q_level);
+[sPPI_WD_TaskA_vs_TaskB_symm_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(sPPI_WD_TaskA_vs_TaskB_symm,q_level);
+gm_sPPI_WD_TaskIndep_asymm = mean(sPPI_WD_TaskIndep_asymm,3);
+gm_sPPI_WD_TaskIndep_symm  = mean(sPPI_WD_TaskIndep_symm,3);
+gm_sPPI_WD_TaskA_vs_TaskB_asymm = mean(sPPI_WD_TaskA_vs_TaskB_asymm,3);
+gm_sPPI_WD_TaskA_vs_TaskB_symm = mean(sPPI_WD_TaskA_vs_TaskB_symm,3);
+gm_sPPI_WD_TaskIndep_asymm(1:1+size(sPPI_WD_TaskIndep_asymm,1):end) = 1;
+gm_sPPI_WD_TaskIndep_symm(1:1+size(sPPI_WD_TaskIndep_symm,1):end) = 1;
+gm_sPPI_WD_TaskA_vs_TaskB_asymm(1:1+size(gm_sPPI_WD_TaskA_vs_TaskB_asymm,1):end) = 0;
+gm_sPPI_WD_TaskA_vs_TaskB_symm(1:1+size(gm_sPPI_WD_TaskA_vs_TaskB_symm,1):end) = 0;
+sPPI_WD_TaskA_vs_TaskB_asymm_FDR(1:1+size(sPPI_WD_TaskA_vs_TaskB_asymm_FDR,1):end) = 0;
+sPPI_WD_TaskA_vs_TaskB_symm_FDR(1:1+size(sPPI_WD_TaskA_vs_TaskB_symm_FDR,1):end) = 0;
+
+figure
+subplot(231); imagesc(gm_sPPI_WD_TaskIndep_asymm);       title('TaskIndep asymm');      axis square; caxis(max_ax(gm_sPPI_WD_TaskIndep_asymm,1));          
+subplot(232); imagesc(gm_sPPI_WD_TaskA_vs_TaskB_asymm);  title('Task AvsB asymm');      axis square; caxis(max_ax(gm_sPPI_WD_TaskA_vs_TaskB_asymm,1)); 
+subplot(233); imagesc(sPPI_WD_TaskA_vs_TaskB_asymm_FDR); title('Task AvsB asymm FDR');  axis square; 
+subplot(234); imagesc(gm_sPPI_WD_TaskIndep_symm);        title('TaskIndep symm');       axis square; caxis(max_ax(gm_sPPI_WD_TaskIndep_symm,1));           
+subplot(235); imagesc(gm_sPPI_WD_TaskA_vs_TaskB_symm);   title('Task AvsB symm');       axis square; caxis(max_ax(gm_sPPI_WD_TaskA_vs_TaskB_symm,1));  
+subplot(236); imagesc(sPPI_WD_TaskA_vs_TaskB_symm_FDR);  title('Task AvsB symm FDR');   axis square; 
+sgtitle('sPPI with Deconvolution (After FIR task regression)')
+set(findall(gcf,'-property','FontSize'),'FontSize',12)
+colormap('redblue')
+colormap(subplot(233),'parula') 
+colormap(subplot(236),'parula') 
+
+sPPI_WD_symmetry = check_symmetry(mean(sPPI_WD_TaskA_vs_TaskB_asymm,3));
+fprintf(['sPPI with deconvolution symmetry :: r = ' num2str(sPPI_WD_symmetry) ' \n']);
+
+%% Results: gPPI with Deconv
+figure
+[gPPI_WD_TaskA_vs_TaskB_asymm_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(gPPI_WD_TaskA_vs_TaskB_asymm,q_level);
+[gPPI_WD_TaskA_vs_TaskB_symm_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(gPPI_WD_TaskA_vs_TaskB_symm,q_level);
+gm_gPPI_WD_TaskIndep_asymm = mean(gPPI_WD_TaskIndep_asymm,3);
+gm_gPPI_WD_TaskIndep_symm  = mean(gPPI_WD_TaskIndep_symm,3);
+gm_gPPI_WD_TaskA_vs_TaskB_asymm = mean(gPPI_WD_TaskA_vs_TaskB_asymm,3);
+gm_gPPI_WD_TaskA_vs_TaskB_symm = mean(gPPI_WD_TaskA_vs_TaskB_symm,3);
+gm_gPPI_WD_TaskIndep_asymm(1:1+size(gPPI_WD_TaskIndep_asymm,1):end) = 1;
+gm_gPPI_WD_TaskIndep_symm(1:1+size(gPPI_WD_TaskIndep_symm,1):end) = 1;
+gm_gPPI_WD_TaskA_vs_TaskB_asymm(1:1+size(gm_gPPI_WD_TaskA_vs_TaskB_asymm,1):end) = 0;
+gm_gPPI_WD_TaskA_vs_TaskB_symm(1:1+size(gm_gPPI_WD_TaskA_vs_TaskB_symm,1):end) = 0;
+gPPI_WD_TaskA_vs_TaskB_asymm_FDR(1:1+size(gPPI_WD_TaskA_vs_TaskB_asymm_FDR,1):end) = 0;
+gPPI_WD_TaskA_vs_TaskB_symm_FDR(1:1+size(gPPI_WD_TaskA_vs_TaskB_symm_FDR,1):end) = 0;
+
+subplot(251); imagesc(gm_gPPI_WD_TaskIndep_asymm);         title('TaskIndep asymm');      axis square; caxis(max_ax(gm_gPPI_WD_TaskIndep_asymm,1));
+subplot(252); imagesc(mean(gPPI_WD_TaskA_asymm,3));        title('Task A asymm');         axis square; caxis(max_ax(mean(gPPI_WD_TaskA_asymm,3),1));
+subplot(253); imagesc(mean(gPPI_WD_TaskB_asymm,3));        title('Task B asymm');         axis square; caxis(max_ax(mean(gPPI_WD_TaskB_asymm,3),1));
+subplot(254); imagesc(gm_gPPI_WD_TaskA_vs_TaskB_asymm);    title('Task AvsB asymm');      axis square; caxis(max_ax(gm_gPPI_WD_TaskA_vs_TaskB_asymm,1));
+subplot(255); imagesc(gPPI_WD_TaskA_vs_TaskB_asymm_FDR);   title('Task AvsB asymm FDR');  axis square;
+subplot(256); imagesc(gm_gPPI_WD_TaskIndep_symm);          title('TaskIndep symm');       axis square; caxis(max_ax(gm_gPPI_WD_TaskIndep_symm,1));
+subplot(257); imagesc(mean(gPPI_WD_TaskA_symm,3));         title('Task A symm');          axis square; caxis(max_ax(mean(gPPI_WD_TaskA_symm,3),1));
+subplot(258); imagesc(mean(gPPI_WD_TaskB_symm,3));         title('Task B symm');          axis square; caxis(max_ax(mean(gPPI_WD_TaskB_symm,3),1));
+subplot(259); imagesc(gm_gPPI_WD_TaskA_vs_TaskB_symm);     title('Task AvsB symm');       axis square; caxis(max_ax(gm_gPPI_WD_TaskA_vs_TaskB_symm,1));
+subplot(2,5,10); imagesc(gPPI_WD_TaskA_vs_TaskB_symm_FDR); title('Task AvsB symm FDR');   axis square;
+sgtitle('gPPI with Deconvolution (After FIR task regression)')
+set(findall(gcf,'-property','FontSize'),'FontSize',12)
+colormap('redblue')
+colormap(subplot(255),'parula') 
+colormap(subplot(2,5,10),'parula') 
+
+gPPI_WD_symmetry = check_symmetry(mean(gPPI_WD_TaskA_vs_TaskB_asymm,3));
+fprintf(['gPPI with deconvolution symmetry :: r = ' num2str(gPPI_WD_symmetry) ' \n']);
+
+%% Sensitivity and Specificity
+[TPR_sPPI_WD_asymm, TNR_sPPI_WD_asymm] = TPR_TNR(sPPI_WD_TaskA_vs_TaskB_asymm_FDR,ground_truth);
+[TPR_sPPI_WD_symm,  TNR_sPPI_WD_symm]  = TPR_TNR(sPPI_WD_TaskA_vs_TaskB_symm_FDR,ground_truth);
+[TPR_gPPI_WD_asymm, TNR_gPPI_WD_asymm] = TPR_TNR(gPPI_WD_TaskA_vs_TaskB_asymm_FDR,ground_truth);
+[TPR_gPPI_WD_symm,  TNR_gPPI_WD_symm]  = TPR_TNR(gPPI_WD_TaskA_vs_TaskB_symm_FDR,ground_truth);
+
+%% Save results
+save([stat_path filesep exp_folder filesep 'group_stat' filesep 'sPPI_and_gPPI_with_Deconv_FIR_RESULTS.mat'],'TPR*','TNR*','*symmetry');
+
+
+
