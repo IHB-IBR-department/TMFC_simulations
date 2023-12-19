@@ -153,6 +153,19 @@ Finally, we used **asymmetric** synaptic weight matrices to test whether the gPP
 <img src = "illustrations/ground_truth_asymmetric.png" width = 700>
 </p>
 
-The **regression dynamic causal modelling (rDCM)** method was used to demonstrate that the direction of information flow can, in principle, be inferred from the proposed type of simulation by means of an appropriate effective connectivity (EC) method. As rDCM requires a relatively high SNR, we used SNR = 5 here. If the gPPI method is unable to correctly evaluate the direction of information flow at a high SNR, then it would also fail at lower SNRs.
+The **regression dynamic causal modelling (rDCM)** method (see **Note**), which is a conventional EC method, was used as a reference. As rDCM requires a relatively high SNR, we used SNR = 5 here. If the gPPI method is unable to correctly evaluate the direction of information flow at a high SNR, then it would also fail at lower SNRs.
+
+Results for block design with twenty 20 s blocks per condition and SNR = 5:
+
+<p align="center">
+<img src = "illustrations/rDCM_gPPI_block_design_SNR5_SF1_20_blocks_asymmetric.png" width = 500>
+</p>
+
+Here we see that rDCM and gPPI with deconvolution are able to determine the effective strength of task-modulated synaptic connections at high SNR and long scan durations.
+
+
+**Note:** Original DCM method enables us to estimate the effective strength of **task-independent (intrinsic)** synaptic connections **(A matrix)**, **task-modulated (extrinsic)** synaptic connections **(B matrix)**, and the direct influence of **driving inputs** that cause activations **(C matrix)**. The task-modulated effective connectivity (TMEC) matrix cannot be directly obtained using the rDCM approach because it is based on the linear neural state equation **without the B matrix**. If we feed the entire time series of the resting-state or task-state BOLD signal into rDCM, the A matrix will reflect the resting-state effective connectivity (RSEC) and task-state effective connectivity (TSEC) matrices, respectively. In the latter case, the A matrix will depend on both spontaneous (intrinsic) and task-modulated (extrinsic) oscillations. To calculate the TMEC matrix, we propose calculating two A matrices for concatenated “Cond A” and “Cond B” block time series after removing the first six seconds of each block. The difference between these matrices will subtract spontaneous (intrinsic) EC and result in TMEC:
+
+<img src = "illustrations/rDCM_block_design_SNR5_SF1_20_blocks_asymmetric.png">
 
 
