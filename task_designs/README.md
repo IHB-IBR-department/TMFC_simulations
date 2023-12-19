@@ -11,8 +11,8 @@ Task design and simulated BOLD time series *.mat files are used as input for TMF
 * **durations{1,i}** - durations of blocks/events for i-th condition
 * **names{1,i}** - name for i-th condition
 * **onsets{1,i}** - stimulus onset times for i-th condition
-* **rest_matrix{1,1}** - weighting factors [n x n] for the construction of synaptic weight matrices (n - number of functional modules in the network) 
-* **task_matrices{1,i}** - weighting factors [n x n] for the construction of synaptic weight matrices for i-th condition (n - number of functional modules in the network) 
+* **rest_matrix{1,1}** - weighting factors [k x k] for the construction of synaptic weight matrices (k - number of functional modules in the network) 
+* **task_matrices{1,i}** - weighting factors [k x k] for the construction of synaptic weight matrices for i-th condition (k - number of functional modules in the network) 
 * **activations{1,i}** - indicate which functional modules are activated during i-th condition (activations are modelled by simple box-car functions)
   * for example, consider 4 functonal modules, modules 1 & 3 activated during Cond№1, modules 2 & 4 activated during Cond№2
   * activations{1,1} = [1 0 1 0]
