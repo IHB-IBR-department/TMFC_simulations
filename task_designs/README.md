@@ -228,4 +228,23 @@
    * Block sequence: [Cond_A, Rest, Cond_B, Rest, Cond_B, ... ]
    * Dummy scans: first 3 time points (6 s)
    * Total scan time = 26.6 min
-
+     
+* [26_EVENT [2s_TR] [1s_DUR] [6s_ISI] [100_TRIALS] [ASYMMETRIC]](/task_designs/26_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS]_ASYMMETRIC.mat)
+   * Event-related design
+   * **Asymmetric synaptic weight matrices**
+   * TR = 2 s
+   * Event duration = 1 s
+   * Random interstimulus interval (ISI) = 4-8 s (mean ISI = 6 s)
+   * 100 events per condition
+   * Dummy scans: first 3 time points (6 s)
+   * Total scan time = 23.6 min
+ 
+* [27_EVENT [2s_TR] [1s_DUR] [6s_ISI] [200_TRIALS] [ASYMMETRIC]](/task_designs/27_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[200_TRIALS]_ASYMMETRIC.mat)
+   * Event-related design
+   * **Asymmetric synaptic weight matrices**
+   * TR = 2 s
+   * Event duration = 1 s
+   * Random interstimulus interval (ISI) = 4-8 s (mean ISI = 6 s)
+   * 200 events per condition
+   * Dummy scans: first 3 time points (6 s)
+   * Total scan time = 40.9 min
