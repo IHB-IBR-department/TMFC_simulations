@@ -41,7 +41,7 @@ Gamma-band oscillations are linked to sensory processing<sup>[1](https://doi.org
 
 The simulation procedure included five steps:
   
-1. Simulation of **gamma-band oscillatory neuronal activity** for 100 interconnected brain regions using **Wilson-Cowan equations**. Synaptic weights between 100 brain regions depend on the task conditions, which allow to control the ground-truth TMFC. Transient activity-dependent modulation of synaptic strength, lasting from tens of milliseconds to several minutes, is referred to as short-term synaptic plasticity<sup>[14](https://doi.org/10.1146/annurev.physiol.64.092501.114547)</sup>,<sup>[15](https://doi.org/10.1016/j.neuroimage.2009.11.015)[15]</sup>,<sup>[16](https://doi.org/10.1101/cshperspect.a005702)</sup>.
+1. Simulation of **gamma-band oscillatory neuronal activity** for 100 interconnected brain regions using **Wilson-Cowan equations**. Synaptic weights between 100 brain regions depend on the task conditions, which allow to control the ground-truth TMFC. Transient activity-dependent modulation of synaptic strength, lasting from tens of milliseconds to several minutes, is referred to as short-term synaptic plasticity<sup>[14](https://doi.org/10.1146/annurev.physiol.64.092501.114547)</sup>,<sup>[15](https://doi.org/10.1016/j.neuroimage.2009.11.015)</sup>,<sup>[16](https://doi.org/10.1101/cshperspect.a005702)</sup>.
    
 2. Simulation of **simple co-activations** using box-car functions. Co-activations are simultaneous activations (task-evoked hemodynamic responses) without communication between brain regions.
 
