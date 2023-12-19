@@ -139,7 +139,7 @@ Next, we considered simulations with co-activations (SF = 1) to investigate how 
 
 <img src = "illustrations/event_related_design_coact_SF1_SNR04_N100_gPPI_without_deconv_no_FIR.png">
 
-Here, we can see, that gPPI without deconvolution does not protect against co-activations.
+Here we can see that gPPI without deconvolution does not protect against co-activations.
 
 To isolate TMFC from co-activation effects, we can **regress out task activations** using finite impulse response (FIR) functions prior to TMFC analysis. **FIR task regression** substantially improves gPPI specificity:
 
@@ -161,7 +161,7 @@ Results for block design with twenty 20 s blocks per condition and SNR = 5:
 <img src = "illustrations/rDCM_gPPI_block_design_SNR5_SF1_20_blocks_asymmetric.png" width = 500>
 </p>
 
-Here we see that rDCM and gPPI with deconvolution are able to determine the effective strength of task-modulated synaptic connections at high SNR and long scan durations.
+Here we can see that rDCM and gPPI with deconvolution are able to determine the effective strength of task-modulated synaptic connections at high SNR and long scan durations.
 
 
 **Note:** Original DCM method enables us to estimate the effective strength of **task-independent (intrinsic)** synaptic connections **(A matrix)**, **task-modulated (extrinsic)** synaptic connections **(B matrix)**, and the direct influence of **driving inputs** that cause activations **(C matrix)**. The task-modulated effective connectivity (TMEC) matrix cannot be directly obtained using the rDCM approach because it is based on the linear neural state equation **without the B matrix**. If we feed the entire time series of the resting-state or task-state BOLD signal into rDCM, the A matrix will reflect the resting-state effective connectivity (RSEC) and task-state effective connectivity (TSEC) matrices, respectively. In the latter case, the A matrix will depend on both spontaneous (intrinsic) and task-modulated (extrinsic) oscillations. To calculate the TMEC matrix, we propose calculating two A matrices for concatenated “Cond A” and “Cond B” block time series after removing the first six seconds of each block. The difference between these matrices will subtract spontaneous (intrinsic) EC and result in TMEC:
