@@ -1,5 +1,16 @@
 # Simulated BOLD time series 
 
+Task design *.mat file is used as an input for TMFC simulations using Python code. 
+
+The output of the Python code is simulated BOLD time series *.mat file. 
+
+Task design and simulated BOLD time series *.mat files are used as input for TMFC analysis using MATLAB code. 
+
+## "Simulated BOLD time series" data structures
+
+* oscill - oscillatory-related BOLD signal, [m x n x o] matrix, where m - time point, n - brain region, o - subject   
+* coact - coactivation-related BOLD signal, [m x n] matrix, where m - time point, n - brain region
+
 ## Experiments:
 
 * [SIM_BOLD 01_BLOCK [2s_TR] [20s_DUR] [10_BLOCKS]](/simulated_BOLD_time_series/SIM_BOLD_01_BLOCK_[2s_TR]_[20s_DUR]_[10_BLOCKS].mat)
@@ -20,7 +31,7 @@
    * Dummy scans: first 3 time points (6 s)
    * Total scan time = 23.6 min
      
-* [SIM_BOLD 03_EVENT [500ms_TR] [1s_DUR] [6s_ISI] [100_TRIALS]](/simulated_BOLD_time_series/SIM_BOLD_03_EVENT_[500ms_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat)
+* [SIM_BOLD 03_EVENT [500ms_TR] [1s_DUR] [6s_ISI] [100_TRIALS]](/simulated_BOLD_time_series/SIM_BOLD_03_EVENT_[500ms_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].zip)
    * Event-related design
    * TR = 500 ms
    * Event duration = 1 s
@@ -29,7 +40,7 @@
    * Dummy scans: first 14 time points (7 s)
    * Total scan time = 23.6 min
      
-* [SIM_BOLD 04_EVENT [700ms_TR] [1s_DUR] [6s_ISI] [100_TRIALS]](/simulated_BOLD_time_series/SIM_BOLD_04_EVENT_[700ms_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat)
+* [SIM_BOLD 04_EVENT [700ms_TR] [1s_DUR] [6s_ISI] [100_TRIALS]](/simulated_BOLD_time_series/SIM_BOLD_04_EVENT_[700ms_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].zip)
    * Event-related design
    * TR = 700 ms
    * Event duration = 1 s
