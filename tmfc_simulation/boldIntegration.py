@@ -4,7 +4,11 @@ import numba
 
 def simulateBOLD(Z, dt, voxelCounts, X=None, F=None, Q=None, V=None,
                  rho=None, alpha=None, V0=None, k1_mul=None, k2=None, k3_mul=None, gamma=None, k=None, tau=None):
-    """Simulate BOLD activity using the Balloon-Windkessel model.
+    """ Adopted function from neurolib, added parameters for the shape of bold activation to the argument,
+    the only difference
+    https://github.com/neurolib-dev/neurolib/blob/master/neurolib/models/bold/timeIntegration.py
+
+    Simulate BOLD activity using the Balloon-Windkessel model.
     See Friston 2000, Friston 2003 and Deco 2013 for reference on how the BOLD signal is simulated.
     The returned BOLD signal should be downsampled to be comparable to a recorded fMRI signal.
 
