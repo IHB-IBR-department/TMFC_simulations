@@ -13,7 +13,7 @@ Here, we provide:
 1. [Task design files](task_designs) (.*mat format) containing stimulus onsets, durations, condition names, and weighting factors for synaptic matrices. <br/>
    **Onsets**, **durations** and **condition names** are defined in the same way as for **multiple conditions** *.mat file for SPM12.
   
-3. [Python code](task_fc_simulation) for TMFC simulations based on **large-scale Wilson-Cowan neural mass model** and **Ballon-Windkessel haemodynamic model**.
+3. [Python code](tmfc_simulation) for TMFC simulations based on **large-scale Wilson-Cowan neural mass model** and **Ballon-Windkessel haemodynamic model**.
 
 4. User-friendly [Jupyter notebooks](jupyter_notebooks) for reproducing our simulations. **Input:** task design. **Output:** simulated BOLD time series.
 
