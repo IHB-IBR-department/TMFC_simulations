@@ -1,5 +1,5 @@
 % ========================================================================
-% TMFC (gPPI) and TMEC (rDCM) analyses for event-related design with 
+% TMFC (gPPI) analysis for event-related design with 
 % asymmetric synaptic weight matrices
 % Requires SPM12 (v7771)
 % ========================================================================
