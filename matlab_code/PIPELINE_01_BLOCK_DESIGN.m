@@ -157,4 +157,17 @@ q_level = 0.001/2;
 block_results_FIR(stat_path,exp_folder,q_level,ground_truth)
 
 
+%% ===============[No centering before PPI calculation]====================
+% Open spm_peb_ppi and comment out line 439: PSY = spm_detrend(PSY);
+% Run PPI estimation
+parallel_calculate_FIR_PPIs_no_centering(stat_path,exp_folder,N,N_ROIs)
+% Uncomment PSY = spm_detrend(PSY);
+
+%% sPPI and gPPI with deconvolution + no cetering (after FIR)
+sPPI_and_gPPI_with_deconv_no_centering_FIR(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth)
+
+%% sPPI and gPPI without deconvolution + no cetering (after FIR)
+sPPI_and_gPPI_without_deconv_no_centering_FIR(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth)
+
+
 
