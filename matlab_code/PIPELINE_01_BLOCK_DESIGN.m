@@ -2,7 +2,7 @@
 % TMFC analysis for block design
 % Requires SPM12 (v7771)
 % ========================================================================
-% Ruslan Masharipov, October, 2023
+% Ruslan Masharipov, May 30, 2024
 % email: ruslan.s.masharipov@gmail.com
 % ========================================================================
 

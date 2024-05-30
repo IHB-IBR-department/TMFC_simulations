@@ -1,8 +1,12 @@
 % ========================================================================
 % TMFC analysis for event-related design
 % Requires SPM12 (v7771)
+%
+% BSC-ITEM requeres ITEM toolbox (https://github.com/JoramSoch/ITEM)
+% BSC-FR requeres GLMsingle toolbox (https://github.com/cvnlab/GLMsingle)
+%
 % ========================================================================
-% Ruslan Masharipov, October, 2023
+% Ruslan Masharipov, May 30, 2024
 % email: ruslan.s.masharipov@gmail.com
 % ========================================================================
 
@@ -11,17 +15,17 @@ close all
 clear
 
 % Set path for stat folder 
-stat_path = 'C:\TMFC_simulations\experiments\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS]';
+stat_path = 'E:\TMFC_simulations\experiments\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS]';
 
 % Set path for simulated BOLD time series *.mat file
-sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\SIM_BOLD_02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
+sim_path = 'E:\TMFC_simulations\simulated_BOLD_time_series\SIM_BOLD_02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
 
 % Set path for task design *.mat file (stimulus onset times, SOTs)
 % Simular to the multiple condition *.mat file used in SPM 12
-sots_path = 'C:\TMFC_simulations\task_designs\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
+sots_path = 'E:\TMFC_simulations\task_designs\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
 
 % Symmetric ground truth matrix
-load('C:\TMFC_simulations\matlab_code\ground_truth_symm_matrix.mat');
+load('E:\TMFC_simulations\matlab_code\ground_truth_symm_matrix.mat');
 
 % BOLD-signal = BOLD(Wilson-Cowan oscillations) + BOLD(Co-activations) + White Gaussian Noise
 
@@ -144,6 +148,12 @@ BSC_LSA(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth)
 
 %% Beta-Series Correlations: Least Squares All (after FIR)
 BSC_LSA_FIR(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth)
+
+%% Beta-Series Correlations: Inverse Transformed Encoding Models
+BSC_ITEM(stat_path,sots_path,exp_folder,N,q_level,ground_truth)
+
+%% Beta-Series Correlations: Inverse Transformed Encoding Models (after FIR)
+BSC_ITEM_FIR(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth)
 
 %% Beta-Series Correlations: Least Squares Separate
 parallel_BSC_LSS(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth);
