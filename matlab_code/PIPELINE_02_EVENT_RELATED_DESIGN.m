@@ -2,8 +2,12 @@
 % TMFC analysis for event-related design
 % Requires SPM12 (v7771)
 %
-% BSC-ITEM requeres ITEM toolbox (https://github.com/JoramSoch/ITEM)
-% BSC-FR requeres GLMsingle toolbox (https://github.com/cvnlab/GLMsingle)
+% Beta-Series Correlations based on Inverse Ransformed Encoding Models
+% (BSC-ITEM) requires ITEM toolbox (https://github.com/JoramSoch/ITEM)
+%
+%
+% Beta-Series Correlations based on Fractional Ridge Regression (BSC-FRR)
+% requires GLMsingle toolbox (https://github.com/cvnlab/GLMsingle)
 %
 % ========================================================================
 % Ruslan Masharipov, May 30, 2024
@@ -149,17 +153,23 @@ BSC_LSA(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth)
 %% Beta-Series Correlations: Least Squares All (after FIR)
 BSC_LSA_FIR(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth)
 
+%% Beta-Series Correlations: Least Squares Separate
+parallel_BSC_LSS(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth);
+
+%% Beta-Series Correlations: Least Squares Separate (after FIR)
+parallel_BSC_LSS_FIR(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth);
+
 %% Beta-Series Correlations: Inverse Transformed Encoding Models
 BSC_ITEM(stat_path,sots_path,exp_folder,N,q_level,ground_truth)
 
 %% Beta-Series Correlations: Inverse Transformed Encoding Models (after FIR)
 BSC_ITEM_FIR(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth)
 
-%% Beta-Series Correlations: Least Squares Separate
-parallel_BSC_LSS(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth);
+%% Beta-Series Correlations: Fractional Ridge Regression 
+BSC_FRR(stat_path,sots_path,exp_folder,N,TR,q_level,ground_truth)
 
-%% Beta-Series Correlations: Least Squares Separate (after FIR)
-parallel_BSC_LSS_FIR(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth);
+%% Beta-Series Correlations: Fractional Ridge Regression (after FIR)
+BSC_FRR_FIR(stat_path,sots_path,exp_folder,N,TR,q_level,ground_truth)
 
 %% Task-state FC and Background FC
 TSFC_BGFC(stat_path,exp_folder,N,N_ROIs)
