@@ -11,6 +11,8 @@ load([stat_path filesep exp_folder filesep 'group_stat' filesep 'cPPI_with_Decon
 load([stat_path filesep exp_folder filesep 'group_stat' filesep 'cPPI_without_Deconv_FIR.mat']);
 load([stat_path filesep exp_folder filesep 'group_stat' filesep 'BSC_LSA_FIR.mat']);
 load([stat_path filesep exp_folder filesep 'group_stat' filesep 'BSC_LSS_FIR.mat']);
+load([stat_path filesep exp_folder filesep 'group_stat' filesep 'BSC_ITEM_FIR.mat']);
+load([stat_path filesep exp_folder filesep 'group_stat' filesep 'BSC_FRR_FIR.mat']);
 load([stat_path filesep exp_folder filesep 'group_stat' filesep 'TSFC_BGFC.mat']);
 
 %% sPPI with Deconv
@@ -197,6 +199,52 @@ subplot(235); imagesc(BSC_LSS_TaskB_group_FDR);     title('LSS Task B FDR');  ax
 subplot(236); imagesc(BSC_LSS_TaskA_vs_TaskB_group_FDR); title('LSS Task AvsB FDR');  axis square; 
 
 sgtitle('Beta-series correlations: LSS approach (After FIR task regression)')
+set(findall(gcf,'-property','FontSize'),'FontSize',12)
+colormap('redblue')
+colormap(subplot(234),'parula') 
+colormap(subplot(235),'parula') 
+colormap(subplot(236),'parula')
+
+%%  BSC-ITEM
+[BSC_ITEM_TaskA_group_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(BSC_ITEM_TaskA_group,q_level);
+[BSC_ITEM_TaskB_group_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(BSC_ITEM_TaskB_group,q_level);
+[BSC_ITEM_TaskA_vs_TaskB_group_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(BSC_ITEM_TaskA_vs_TaskB_group,q_level);
+gm_BSC_ITEM_TaskA_vs_TaskB = mean(BSC_ITEM_TaskA_vs_TaskB_group,3);
+gm_BSC_ITEM_TaskA_vs_TaskB(1:1+size(gm_BSC_ITEM_TaskA_vs_TaskB,1):end) = 0;
+BSC_ITEM_TaskA_vs_TaskB_group_FDR(1:1+size(BSC_ITEM_TaskA_vs_TaskB_group_FDR,1):end) = 0;
+
+figure
+subplot(231); imagesc(mean(BSC_ITEM_TaskA_group,3)); title('ITEM Task A');      axis square; caxis(max_ax(mean(BSC_ITEM_TaskA_group,3),1));
+subplot(232); imagesc(mean(BSC_ITEM_TaskB_group,3)); title('ITEM Task B');      axis square; caxis(max_ax(mean(BSC_ITEM_TaskB_group,3),1));
+subplot(233); imagesc(gm_BSC_ITEM_TaskA_vs_TaskB);   title('ITEM Task AvsB');   axis square; caxis(max_ax(gm_BSC_ITEM_TaskA_vs_TaskB,1));
+subplot(234); imagesc(BSC_ITEM_TaskA_group_FDR);     title('ITEM Task A FDR');  axis square; 
+subplot(235); imagesc(BSC_ITEM_TaskB_group_FDR);     title('ITEM Task B FDR');  axis square; 
+subplot(236); imagesc(BSC_ITEM_TaskA_vs_TaskB_group_FDR); title('ITEM Task AvsB FDR');  axis square; 
+
+sgtitle('Beta-series correlations: ITEM approach (After FIR task regression)')
+set(findall(gcf,'-property','FontSize'),'FontSize',12)
+colormap('redblue')
+colormap(subplot(234),'parula') 
+colormap(subplot(235),'parula') 
+colormap(subplot(236),'parula')
+
+%% BSC-FRR
+[BSC_FRR_TaskA_group_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(BSC_FRR_TaskA_group,q_level);
+[BSC_FRR_TaskB_group_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(BSC_FRR_TaskB_group,q_level);
+[BSC_FRR_TaskA_vs_TaskB_group_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(BSC_FRR_TaskA_vs_TaskB_group,q_level);
+gm_BSC_FRR_TaskA_vs_TaskB = mean(BSC_FRR_TaskA_vs_TaskB_group,3);
+gm_BSC_FRR_TaskA_vs_TaskB(1:1+size(gm_BSC_FRR_TaskA_vs_TaskB,1):end) = 0;
+BSC_FRR_TaskA_vs_TaskB_group_FDR(1:1+size(BSC_FRR_TaskA_vs_TaskB_group_FDR,1):end) = 0;
+
+figure
+subplot(231); imagesc(mean(BSC_FRR_TaskA_group,3)); title('FRR TaskA');       axis square; caxis(max_ax(mean(BSC_FRR_TaskA_group,3),1));
+subplot(232); imagesc(mean(BSC_FRR_TaskB_group,3)); title('FRR TaskB');       axis square; caxis(max_ax(mean(BSC_FRR_TaskB_group,3),1));
+subplot(233); imagesc(gm_BSC_FRR_TaskA_vs_TaskB);   title('FRR TaskAvsB');    axis square; caxis(max_ax(gm_BSC_FRR_TaskA_vs_TaskB,1));
+subplot(234); imagesc(BSC_FRR_TaskA_group_FDR);     title('FRR Task A FDR');  axis square; 
+subplot(235); imagesc(BSC_FRR_TaskB_group_FDR);     title('FRR Task B FDR');  axis square; 
+subplot(236); imagesc(BSC_FRR_TaskA_vs_TaskB_group_FDR); title('FRR Task AvsB FDR');  axis square; 
+
+sgtitle('Beta-series correlations: FRR approach (after FIR task regression)')
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 colormap('redblue')
 colormap(subplot(234),'parula') 
