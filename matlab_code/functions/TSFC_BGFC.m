@@ -2,7 +2,7 @@ function TSFC_BGFC(stat_path,exp_folder,N,N_ROIs)
 
 tic
 for subji = 1:N
-    load([stat_path filesep exp_folder filesep 'GLMs' filesep 'Sub_' num2str(subji,'%.3d') filesep  'PPI_ALL.mat']);
+    load([stat_path filesep exp_folder filesep 'GLMs' filesep 'Sub_' num2str(subji,'%.3d') filesep  'VOI_ALL.mat']);
     TSFC = atanh(corr(VOI));  
     clear VOI
 
