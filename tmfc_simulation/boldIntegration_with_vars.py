@@ -1,25 +1,9 @@
 import numpy as np
 import numba
-from typing import Optional, Union
 
 
-def simulateBOLD(Z,
-                 dt,
-                 rho: Optional[Union[float, tuple[float,float],list[float,float]]] = None,
-                 alpha:Optional[Union[float, tuple[float,float],list[float,float]]]=None,
-                 gamma: Optional[Union[float, tuple[float,float],list[float,float]]]=None,
-                 k: Optional[Union[float, tuple[float,float],list[float,float]]]=None,
-                 tau: Optional[Union[float, tuple[float,float],list[float,float]]]=None,
-                 X=None,
-                 F=None,
-                 Q=None,
-                 V=None,
-                 V0=None,
-                 k1_mul=None,
-                 k2=None,
-                 k3_mul=None,
-                 fix:bool = True,
-                 voxelCounts=None):
+def simulateBOLD(Z, dt, voxelCounts, X=None, F=None, Q=None, V=None,
+                 rho=None, alpha=None, V0=None, k1_mul=None, k2=None, k3_mul=None, gamma=None, k=None, tau=None):
     """ Adopted function from neurolib, added parameters for the shape of bold activation to the argument,
     the only difference
     https://github.com/neurolib-dev/neurolib/blob/master/neurolib/models/bold/timeIntegration.py
@@ -45,14 +29,12 @@ def simulateBOLD(Z,
 
     :return: BOLD, X, F, Q, V
     :rtype: (numpy.ndarray,)
-
-    Args:
-        fix:
     """
 
     N = np.shape(Z)[0]
 
-
+    if "voxelCounts" not in globals():
+        voxelCounts = np.ones((N,))
 
     # Balloon-Windkessel model parameters (from Friston 2003):
     # Friston paper: Nonlinear responses in fMRI: The balloon model, Volterra kernels, and other hemodynamics
@@ -75,50 +57,12 @@ def simulateBOLD(Z,
     # If no voxel counts are given, we can use scalar values for each region's parameter:
 
     # Capillary resting net oxygen extraction (dimensionless), E_0 in Friston2000
-    if voxelCounts is None:
-        voxelCounts = np.ones((N,))
+    rho = 0.34 if rho is None else rho
     voxelCountsSqrtInv = 1 / np.sqrt(voxelCounts)
-
-    #setting parameters
-    if rho is not None:
-        assert isinstance(rho, (float, list, tuple, np.ndarray)), \
-            "rho must be float or list or tuple of two floats or N floats"
-
-    if rho is None:
-        rho, var_rho = 0.34, 0.0024
-    elif isinstance(rho, float):
-        rho, var_rho = rho, 0.0024
-    elif len(rho) == 2:
-        rho, var_rho = rho[0], rho[1]
-    elif len(rho) == N:
-        rho = np.array(rho)
-    else:
-        raise ValueError("Rho must be float or of two or N floats")
-
-    if fix:
-        Rho = rho*np.ones((N,))
-    else:
-        Rho = np.random.normal(rho, np.sqrt(var_rho) * voxelCountsSqrtInv, size=(N,))
+    Rho = np.random.normal(rho, np.sqrt(0.0024)*voxelCountsSqrtInv, size=(N,))
     # Grubb's vessel stiffness exponent (dimensionless), \alpha in Friston2000
-    if alpha is not None:
-        assert isinstance(alpha, (float, list, tuple, np.ndarray)), \
-            "alpha must be float or list or tuple of two floats"
-
-    if alpha is None:
-        alpha, var_alpha = 0.32, 0.0015
-    elif isinstance(alpha, float):
-        alpha, var_alpha = alpha, 0.0015
-    elif len(alpha) == 2:
-        alpha, var_alpha = alpha[0], alpha[1]
-    elif len(alpha) == N:
-        alpha = np.array(alpha)
-    else:
-        raise ValueError("alpha must be float or of two or N floats")
-
-    if fix:
-        Alpha = alpha*np.ones((N,))
-    else:
-        Alpha = np.random.normal(alpha, np.sqrt(var_alpha) * voxelCountsSqrtInv, size=(N,))
+    alpha = 0.32 if alpha is None else alpha
+    Alpha = np.random.normal(alpha, np.sqrt(0.0015)*voxelCountsSqrtInv, size=(N,))
 
     # Resting blood volume fraction (dimensionless)
     V0 = 0.02 if V0 is None else V0
@@ -126,84 +70,27 @@ def simulateBOLD(Z,
     K1 = 7 * Rho if k1_mul is None else k1_mul*Rho # (dimensionless)
     k2 = 2.0 if k2 is None else k2  # (dimensionless)
     K3 = 2 * Rho - 0.2 if k3_mul is None else k3_mul * Rho - 0.2  # (dimensionless)
-
-    # rate of flow dependent elimination
-
-    if gamma is not None:
-        assert isinstance(gamma, (float, list, tuple, np.ndarray)), \
-            "gamma must be float or list or tuple of two floats"
-    if gamma is None:
-        gamma, var_gamma = 0.41, 0.002
-    elif isinstance(gamma, float):
-        gamma, var_gamma = gamma, 0.002
-    elif len(gamma) == 2:
-        gamma, var_gamma = gamma[0], gamma[1]
-    elif len(gamma) == N:
-        gamma = np.array(gamma)
-    else:
-        raise ValueError("Gamma must be float or of two or N floats")
-
-    if fix:
-        Gamma = gamma * np.ones((N,))  # Rate constant for autoregulatory feedback by blood flow (1/s)
-    else:
-        Gamma = np.random.normal(gamma, np.sqrt(var_gamma) * voxelCountsSqrtInv, size=(N,))
-
-
-    # rate of signal decay
-    if k is not None:
-        assert isinstance(k, (float, list, tuple, np.ndarray)), \
-         "k must be float or list or tuple of two floats"
-
-    if k is None:
-        k, var_k = 0.65, 0.015
-    elif isinstance(k, float):
-        k, var_k  = k, 0.002
-    elif len(k)==2:
-        k, var_k = k[0], k[1]
-    elif len(k) == N:
-        k = np.array(k)
-    else:
-        raise ValueError("k must be float or of two or N floats")
-
-    if fix:
-        K = k * np.ones((N,))  # Vasodilatory signal decay (1/s)
-    else:
-        K = np.random.normal(k * np.ones(N), np.sqrt(var_k) * voxelCountsSqrtInv, size=(N,))
-
-    # hemodinamic transit time
-    if tau is not None:
-        assert isinstance(tau, (float, list, tuple, np.ndarray)), \
-            "tau must be float or list or tuple of two floats"
-
-    if tau is None:
-        tau, var_tau = 0.98, 0.0568
-    elif isinstance(tau, float):
-        tau, var_tau = tau, 0.0568
-    elif len(tau) == 2:
-        tau, var_tau = tau[0], tau[1]
-    elif len(tau) == N:
-        tau = np.array(tau)
-    else:
-        raise ValueError("tau must be float or of two or N floats")
-
-    if fix:
-        Tau = tau * np.ones((N,))  # Transit time  (s)
-    else:
-        Tau = np.random.normal(tau * np.ones(N), np.sqrt(var_tau) * voxelCountsSqrtInv, size=(N,))
-
+    gamma = 0.41 if gamma is None else gamma
+    #Gamma = gamma * np.ones((N,))  # Rate constant for autoregulatory feedback by blood flow (1/s)
+    Gamma = np.random.normal(gamma, np.sqrt(0.002)* voxelCountsSqrtInv, size=(N,))
+    k = 0.65 if k is None else k
+    #K = k * np.ones((N,))  # Vasodilatory signal decay (1/s)
+    K = np.random.normal(k * np.ones(N), np.sqrt(0.015) * voxelCountsSqrtInv, size=(N,))
+    #tau = 0.98 if tau is None else tau
+    #Tau = tau * np.ones((N,))  # Transit time  (s)
+    Tau = np.random.normal(0.98 * np.ones(N), np.sqrt(0.0568) * voxelCountsSqrtInv, size=(N,))
     # initialize state variables
     # NOTE: We need to use np.copy() because these variables
     # will be overwritten later and numba doesn't like to do that
     # with anything that was defined outside the scope of the @njit'ed function
     X = np.zeros((N,)) if X is None else np.copy(X)  # Vasso dilatory signal
-    F = np.ones((N,)) if F is None else np.copy(F)  # Blood flow
-    Q = np.ones((N,)) if Q is None else np.copy(Q)  # Deoxyhemoglobin
-    V = np.ones((N,)) if V is None else np.copy(V)  # Blood volume
+    F = np.zeros((N,)) if F is None else np.copy(F)  # Blood flow
+    Q = np.zeros((N,)) if Q is None else np.copy(Q)  # Deoxyhemoglobin
+    V = np.zeros((N,)) if V is None else np.copy(V)  # Blood volume
 
     BOLD = np.zeros(np.shape(Z))
     # return integrateBOLD_numba(BOLD, X, Q, F, V, Z, dt, N, rho, alpha, V0, k1, k2, k3, Gamma, K, Tau)
-    BOLD, X, F, Q, V = integrateBOLD_numba(BOLD, X, Q, F, V, Z, dt, N,
-                                           Rho, Alpha, V0, K1, k2, K3, Gamma, K, Tau)
+    BOLD, X, F, Q, V = integrateBOLD_numba(BOLD, X, Q, F, V, Z, dt, N, Rho, Alpha, V0, K1, k2, K3, Gamma, K, Tau)
     return BOLD, X, F, Q, V
 
 
@@ -236,7 +123,8 @@ def integrateBOLD_numba(BOLD, X, Q, F, V, Z, dt, N, Rho, Alpha, V0, K1, k2, K3, 
         # component-wise loop for compatibilty with numba
         for j in range(N):  # loop over all areas
             X[j] = X[j] + dt * (Z[j, i] - K[j] * X[j] - Gamma[j] * (F[j] - 1))
-            Q[j] = Q[j] + dt / Tau[j] * (F[j] / Rho[j] * (1 - (1 - Rho[j]) ** (1 / F[j])) - Q[j] * V[j] ** (1 / Alpha[j] - 1))
+            Q[j] = Q[j] + dt / Tau[j] * (
+                    F[j] / Rho[j] * (1 - (1 - Rho[j]) ** (1 / F[j])) - Q[j] * V[j] ** (1 / Alpha[j] - 1))
             V[j] = V[j] + dt / Tau[j] * (F[j] - V[j] ** (1 / Alpha[j]))
             F[j] = F[j] + dt * X[j]
 
