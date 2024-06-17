@@ -539,6 +539,7 @@ class WCTaskSim:
                                      mat_path,
                                      act_scaling,
                                      fix_bold=True,
+                                     gen_all_reg=True,
                                      **kwargs):
         """
         Generate outer activation for each node defined with a tasks and activation info, where
@@ -577,14 +578,24 @@ class WCTaskSim:
                                                             last_rest=last_rest)
         activations_by_module = create_activations_per_module(activations,
                                                               box_car_activations)
-        hrf = HRF(self.num_modules, dt=dt, TR=TR, normalize_max=act_scaling, fix=fix_bold)
-        hrf.bw_convolve(activations_by_module, append=False, **kwargs)
-        t_res_activ, res_activ = hrf.resample_to_TR(activations_by_module)
+        activations_by_regions = create_reg_activations(activations_by_module,
+                                                        num_regions,
+                                                        num_regions_per_modules)
+        if gen_all_reg:
+            hrf = HRF(num_regions, dt=dt, TR=TR, normalize_max=act_scaling, fix=fix_bold)
+            hrf.bw_convolve(activations_by_regions, append=False, **kwargs)
+            t_res_activ, res_activ = hrf.resample_to_TR(activations_by_regions)
+            convolved_activ = hrf.BOLD
+        else:
+            hrf = HRF(self.num_modules, dt=dt, TR=TR, normalize_max=act_scaling, fix=fix_bold)
+            hrf.bw_convolve(activations_by_module, append=False, **kwargs)
+            t_res_activ, res_activ = hrf.resample_to_TR(activations_by_module)
 
-        res_activ = create_reg_activations(res_activ,
-                                           num_regions,
-                                           num_regions_per_modules)
-        convolved_activ = create_reg_activations(hrf.BOLD, num_regions)
+            res_activ = create_reg_activations(res_activ,
+                                               num_regions,
+                                               num_regions_per_modules)
+            convolved_activ = create_reg_activations(hrf.BOLD, num_regions)
+
         return t_res_activ, res_activ, convolved_activ
 
 
@@ -935,7 +946,7 @@ class HRF:
 
         """
         if isinstance(onsets[0], (int, float)):
-            onsets = self.N * [onsets]  # just duplicate for all regions
+            onsets = self.N * [onsets]  # just duplicate for all modules
         max_onset = np.max([np.max(onset) for onset in onsets])
         length = int((max_onset + duration + last_rest) * 1000 / self.dt)
         length_first_rest = int(first_rest * 1000 / self.dt)

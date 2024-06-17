@@ -78,8 +78,14 @@ for subji = 1:N
     outputdir = [stat_path filesep exp_folder filesep 'FIR_GLMs' filesep 'Sub_' num2str(subji,'%.3d') filesep  'GLMsingle_cHRF'];
     
     data = {VOI.VOI(1:half,:)',VOI.VOI(half+1:dur,:)'};
-
-    GLMestimatesingletrial(design,data,stimdur,TR,outputdir,opt);
+    
+    out = 0;
+    while(~out)
+        try
+            GLMestimatesingletrial(design,data,stimdur,TR,outputdir,opt);
+            out = 1;
+        end
+    end
 
     load([stat_path filesep exp_folder filesep 'FIR_GLMs' filesep 'Sub_' num2str(subji,'%.3d') filesep 'GLMsingle_cHRF' filesep 'TYPED_FITHRF_GLMDENOISE_RR.mat'], 'modelmd');
     betas = squeeze(modelmd);
