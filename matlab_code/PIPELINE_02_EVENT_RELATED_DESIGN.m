@@ -2,7 +2,7 @@
 % TMFC analysis for event-related design
 % Requires SPM12 (v7771)
 %
-% Beta-Series Correlations based on Inverse Ransformed Encoding Models
+% Beta-Series Correlations based on Inverse Transformed Encoding Models
 % (BSC-ITEM) requires ITEM toolbox (https://github.com/JoramSoch/ITEM)
 %
 %

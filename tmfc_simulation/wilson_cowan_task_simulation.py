@@ -540,6 +540,7 @@ class WCTaskSim:
                                      act_scaling,
                                      fix_bold=True,
                                      gen_all_reg=True,
+                                     dt=10,
                                      **kwargs):
         """
         Generate outer activation for each node defined with a tasks and activation info, where
@@ -560,7 +561,7 @@ class WCTaskSim:
         first_rest = self.first_duration
         last_rest = self.last_duration
         TR = self.TR
-        dt = self.wc.params["dt"]
+        #dt = self.wc.params["dt"]
         input_data = io.loadmat(mat_path)
         num_tasks = input_data['onsets'].shape[1]
         onsets_list = []
@@ -573,7 +574,7 @@ class WCTaskSim:
 
         box_car_activations = create_task_design_activation(onsets_list,
                                                             durations_list,
-                                                            dt,
+                                                            dt=dt,
                                                             first_rest=first_rest,
                                                             last_rest=last_rest)
         activations_by_module = create_activations_per_module(activations,
