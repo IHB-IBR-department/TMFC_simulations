@@ -2,7 +2,7 @@
 % TMFC analysis for block design
 % Requires SPM12 (v7771)
 % ========================================================================
-% Ruslan Masharipov, May 30, 2024
+% Ruslan Masharipov, August 7, 2024
 % email: ruslan.s.masharipov@gmail.com
 % ========================================================================
 
@@ -76,7 +76,7 @@ sots_path = sots_path(1:end-4);
 sots_path = join([sots_path '_[' num2str(STP_delay,'%.2f') 's_STP].mat'],1);
 save(sots_path,'activations','onsets','durations','names','rest_matrix','task_matrices');
 
-%% Generate .nii functional images for SPM estimate
+%% Generate .nii functional images for SPM
 generate_funct_images(stat_path,sim_path,exp_folder,SF,SNR,N,N_ROIs,dummy)
 
 %% Generate .nii ROI binary masks for SPM VOI extraction 
@@ -157,6 +157,9 @@ q_level = 0.001/2;
 block_results_FIR(stat_path,exp_folder,q_level,ground_truth)
 
 
+
+
+
 %% ===============[No centering before PPI calculation]====================
 % Open spm_peb_ppi and comment out line 439: PSY = spm_detrend(PSY);
 % Run PPI estimation
@@ -168,6 +171,5 @@ sPPI_and_gPPI_with_deconv_no_centering_FIR(stat_path,exp_folder,N,N_ROIs,q_level
 
 %% sPPI and gPPI without deconvolution + no cetering (after FIR)
 sPPI_and_gPPI_without_deconv_no_centering_FIR(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth)
-
 
 

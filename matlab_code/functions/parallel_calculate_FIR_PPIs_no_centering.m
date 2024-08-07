@@ -1,7 +1,7 @@
 function parallel_calculate_FIR_PPIs_no_centering(stat_path,exp_folder,N,N_ROIs)
 
 % ========================================================================
-% Ruslan Masharipov, October, 2023
+% Ruslan Masharipov, July, 2024
 % email: ruslan.s.masharipov@gmail.com
 % ========================================================================
 

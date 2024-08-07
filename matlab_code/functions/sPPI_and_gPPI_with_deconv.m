@@ -137,10 +137,10 @@ gPPI_WD_symmetry = check_symmetry(mean(gPPI_WD_TaskA_vs_TaskB_asymm,3));
 fprintf(['gPPI with deconvolution symmetry :: r = ' num2str(gPPI_WD_symmetry) ' \n']);
 
 %% Sensitivity and Specificity
-[TPR_sPPI_WD_asymm, TNR_sPPI_WD_asymm] = TPR_TNR(sPPI_WD_TaskA_vs_TaskB_asymm_FDR,ground_truth);
-[TPR_sPPI_WD_symm,  TNR_sPPI_WD_symm]  = TPR_TNR(sPPI_WD_TaskA_vs_TaskB_symm_FDR,ground_truth);
-[TPR_gPPI_WD_asymm, TNR_gPPI_WD_asymm] = TPR_TNR(gPPI_WD_TaskA_vs_TaskB_asymm_FDR,ground_truth);
-[TPR_gPPI_WD_symm,  TNR_gPPI_WD_symm]  = TPR_TNR(gPPI_WD_TaskA_vs_TaskB_symm_FDR,ground_truth);
+[TPR_sPPI_WD_asymm, TNR_sPPI_WD_asymm] = TPR_TNR(sPPI_WD_TaskA_vs_TaskB_asymm_FDR,ground_truth)
+[TPR_sPPI_WD_symm,  TNR_sPPI_WD_symm]  = TPR_TNR(sPPI_WD_TaskA_vs_TaskB_symm_FDR,ground_truth)
+[TPR_gPPI_WD_asymm, TNR_gPPI_WD_asymm] = TPR_TNR(gPPI_WD_TaskA_vs_TaskB_asymm_FDR,ground_truth)
+[TPR_gPPI_WD_symm,  TNR_gPPI_WD_symm]  = TPR_TNR(gPPI_WD_TaskA_vs_TaskB_symm_FDR,ground_truth)
 
 %% Save results
 save([stat_path filesep exp_folder filesep 'group_stat' filesep 'sPPI_and_gPPI_with_Deconv_RESULTS.mat'],'TPR*','TNR*','*symmetry');

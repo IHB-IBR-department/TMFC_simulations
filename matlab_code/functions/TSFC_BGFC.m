@@ -1,4 +1,9 @@
-function TSFC_BGFC(stat_path,exp_folder,N,N_ROIs)
+function TSFC_BGFC(stat_path,exp_folder,N)
+
+% ========================================================================
+% Ruslan Masharipov, October, 2023
+% email: ruslan.s.masharipov@gmail.com
+% ========================================================================
 
 tic
 for subji = 1:N

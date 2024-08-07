@@ -2,15 +2,11 @@
 % TMFC analysis for event-related design
 % Requires SPM12 (v7771)
 %
-% Beta-Series Correlations based on Inverse Transformed Encoding Models
-% (BSC-ITEM) requires ITEM toolbox (https://github.com/JoramSoch/ITEM)
-%
-%
 % Beta-Series Correlations based on Fractional Ridge Regression (BSC-FRR)
 % requires GLMsingle toolbox (https://github.com/cvnlab/GLMsingle)
 %
 % ========================================================================
-% Ruslan Masharipov, May 30, 2024
+% Ruslan Masharipov, August 7, 2024
 % email: ruslan.s.masharipov@gmail.com
 % ========================================================================
 
@@ -19,17 +15,17 @@ close all
 clear
 
 % Set path for stat folder 
-stat_path = 'E:\TMFC_simulations\experiments\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS]';
+stat_path = 'C:\TMFC_simulations\experiments\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS]';
 
 % Set path for simulated BOLD time series *.mat file
-sim_path = 'E:\TMFC_simulations\simulated_BOLD_time_series\SIM_BOLD_02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
+sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\SIM_BOLD_02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
 
 % Set path for task design *.mat file (stimulus onset times, SOTs)
 % Simular to the multiple condition *.mat file used in SPM 12
-sots_path = 'E:\TMFC_simulations\task_designs\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
+sots_path = 'C:\TMFC_simulations\task_designs\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
 
 % Symmetric ground truth matrix
-load('E:\TMFC_simulations\matlab_code\ground_truth_symm_matrix.mat');
+load('C:\TMFC_simulations\matlab_code\ground_truth_symm_matrix.mat');
 
 % BOLD-signal = BOLD(Wilson-Cowan oscillations) + BOLD(Co-activations) + White Gaussian Noise
 
@@ -84,7 +80,7 @@ sots_path = sots_path(1:end-4);
 sots_path = join([sots_path '_[' num2str(STP_delay,'%.2f') 's_STP].mat'],1);
 save(sots_path,'activations','onsets','durations','names','rest_matrix','task_matrices');
 
-%% Generate .nii functional images for SPM estimate
+%% Generate .nii functional images for SPM
 generate_funct_images(stat_path,sim_path,exp_folder,SF,SNR,N,N_ROIs,dummy)
 
 %% Generate .nii ROI binary masks for SPM VOI extraction 
@@ -159,12 +155,6 @@ parallel_BSC_LSS(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth)
 %% Beta-Series Correlations: Least Squares Separate (after FIR)
 parallel_BSC_LSS_FIR(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth);
 
-%% Beta-Series Correlations: Inverse Transformed Encoding Models
-BSC_ITEM(stat_path,sots_path,exp_folder,N,q_level,ground_truth)
-
-%% Beta-Series Correlations: Inverse Transformed Encoding Models (after FIR)
-BSC_ITEM_FIR(stat_path,sots_path,exp_folder,N,TR,model,q_level,ground_truth)
-
 %% Beta-Series Correlations: Fractional Ridge Regression 
 BSC_FRR(stat_path,sots_path,exp_folder,N,TR,q_level,ground_truth)
 
@@ -182,8 +172,13 @@ event_related_results(stat_path,exp_folder,q_level,ground_truth)
 
 %% TMFC results after FIR task regression 
 % (Plot all figures for a given q-level)
-q_level = 0.001/2;
+q_level = 0.05/2;
 event_related_results_FIR(stat_path,exp_folder,q_level,ground_truth)
+
+
+
+
+
 
 %% ===============[No centering before PPI calculation]====================
 % Open spm_peb_ppi and comment out line 439: PSY = spm_detrend(PSY);
@@ -196,5 +191,4 @@ sPPI_and_gPPI_with_deconv_no_centering_FIR(stat_path,exp_folder,N,N_ROIs,q_level
 
 %% sPPI and gPPI without deconvolution + no cetering (after FIR)
 sPPI_and_gPPI_without_deconv_no_centering_FIR(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth)
-
 

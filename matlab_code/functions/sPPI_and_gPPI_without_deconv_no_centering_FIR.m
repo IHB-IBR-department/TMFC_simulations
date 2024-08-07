@@ -1,7 +1,7 @@
 function sPPI_and_gPPI_without_deconv_no_centering_FIR(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth)
 
 % ========================================================================
-% Ruslan Masharipov, October, 2023
+% Ruslan Masharipov, July, 2024
 % email: ruslan.s.masharipov@gmail.com
 % ========================================================================
 

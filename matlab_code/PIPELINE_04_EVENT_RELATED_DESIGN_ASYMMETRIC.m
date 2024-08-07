@@ -3,7 +3,7 @@
 % asymmetric synaptic weight matrices
 % Requires SPM12 (v7771)
 % ========================================================================
-% Ruslan Masharipov, October, 2023
+% Ruslan Masharipov, July, 2024
 % email: ruslan.s.masharipov@gmail.com
 % ========================================================================
 
@@ -30,7 +30,7 @@ load('C:\TMFC_simulations\matlab_code\ground_truth_asymm_matrix.mat');
 % Scaling Factor (SF):
 % SF = SD_oscill/SD_coact
 % Set SF = 0 for no co-activations
-SF = 1;
+SF = 0;
 
 % Additive white gaussian noise
 % Signal-to-noise ratio (SNR):
@@ -77,7 +77,7 @@ sots_path = sots_path(1:end-4);
 sots_path = join([sots_path '_[' num2str(STP_delay,'%.2f') 's_STP].mat'],1);
 save(sots_path,'activations','onsets','durations','names','rest_matrix','task_matrices');
 
-%% Generate .nii functional images for SPM estimate
+%% Generate .nii functional images for SPM
 generate_funct_images(stat_path,sim_path,exp_folder,SF,SNR,N,N_ROIs,dummy)
 
 %% Generate .nii ROI binary masks for SPM VOI extraction 
@@ -93,15 +93,31 @@ tic
 parallel_estimate_FIR_GLM(stat_path,sots_path,exp_folder,N,TR,model,FIR_window,FIR_bins);
 fprintf(['Estimate FIR GLM :: Done in: ' num2str(toc) 's \n']);
 
+%% VOI time-series extraction of adjusted data
+tic
+parallel_extract_VOI(stat_path,exp_folder,N,N_ROIs)
+fprintf(['Extract VOI :: Done in: ' num2str(toc) 's \n']);
+
 %% VOI time-series extraction of adjusted data (after FIR)
 tic
 parallel_extract_FIR_VOI(stat_path,exp_folder,N,N_ROIs)
 fprintf(['Extract FIR VOI :: Done in: ' num2str(toc) 's \n']);
 
+%% Calculate PPIs
+tic
+parallel_calculate_PPIs (stat_path,exp_folder,N,N_ROIs)
+fprintf(['Calculate PPI :: Done in: ' num2str(toc) 's \n']);
+
 %% Calculate PPIs (after FIR)
 tic
 parallel_calculate_FIR_PPIs(stat_path,exp_folder,N,N_ROIs)
 fprintf(['Calculate FIR PPI :: Done in: ' num2str(toc) 's \n']);
+
+%% sPPI and gPPI with deconvolution
+sPPI_and_gPPI_with_deconv(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth_asymm)
+
+%% sPPI and gPPI without deconvolution
+sPPI_and_gPPI_without_deconv(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth_asymm)
 
 %% sPPI and gPPI with deconvolution (after FIR)
 sPPI_and_gPPI_with_deconv_FIR(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth_asymm)
@@ -110,8 +126,11 @@ sPPI_and_gPPI_with_deconv_FIR(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth
 sPPI_and_gPPI_without_deconv_FIR(stat_path,exp_folder,N,N_ROIs,q_level,ground_truth_asymm)
 
 %% Correlations between ground truth and gPPI
-load([stat_path filesep exp_folder filesep 'group_stat' filesep 'sPPI_and_gPPI_with_Deconv_FIR.mat'])
-load([stat_path filesep exp_folder filesep 'group_stat' filesep 'sPPI_and_gPPI_without_Deconv_FIR.mat'])
+% load([stat_path filesep exp_folder filesep 'group_stat' filesep 'sPPI_and_gPPI_with_Deconv_FIR.mat'])    % If scaling factor, SF =/= 0 
+% load([stat_path filesep exp_folder filesep 'group_stat' filesep 'sPPI_and_gPPI_without_Deconv_FIR.mat']) % If scaling factor, SF =/= 0 
+load([stat_path filesep exp_folder filesep 'group_stat' filesep 'sPPI_and_gPPI_with_Deconv.mat'])          % If scaling factor, SF = 0 (no co-activations)
+load([stat_path filesep exp_folder filesep 'group_stat' filesep 'sPPI_and_gPPI_without_Deconv.mat'])       % If scaling factor, SF = 0 (no co-activations)
+
 
 mean_gPPI_WD  = mean(gPPI_WD_TaskA_vs_TaskB_asymm,3);
 mean_gPPI_WoD  = mean(gPPI_WoD_TaskA_vs_TaskB_asymm,3);
@@ -130,12 +149,10 @@ truth = [lower_triangle(ground_truth_asymm), upper_triangle(ground_truth_asymm)]
 gPPI_WD =  [lower_triangle(mean_gPPI_WD), upper_triangle(mean_gPPI_WD)]; 
 gPPI_WoD =  [lower_triangle(mean_gPPI_WoD), upper_triangle(mean_gPPI_WoD)]; 
 
-truth_vs_gPPI_WD = corr(truth',gPPI_WD')
-truth_vs_gPPI_WoD = corr(truth',gPPI_WoD')
+truth_vs_gPPI_WD = corr(truth',gPPI_WD');
+truth_vs_gPPI_WoD = corr(truth',gPPI_WoD');
 
-% Sign errors (SE)
-gPPI_WD_SE = sum((gPPI_WD.*truth)<0)/nnz(truth)*100
-gPPI_WoD_SE = sum((gPPI_WoD.*truth)<0)/nnz(truth)*100
-
-
+% Correct Sign Rate (CSR)
+gPPI_WD_CSR = sum((gPPI_WD.*truth)>0)/nnz(truth)*100;
+gPPI_WoD_CSR = sum((gPPI_WoD.*truth)>0)/nnz(truth)*100;
 

@@ -1,5 +1,10 @@
 function BSC_FRR(stat_path,sots_path,exp_folder,N,TR,q_level,ground_truth)
 
+% ========================================================================
+% Ruslan Masharipov, July, 2024
+% email: ruslan.s.masharipov@gmail.com
+% ========================================================================
+
 tic
 
 % Number of *.nii images per subject
@@ -108,7 +113,7 @@ for subji = 1:N
     BSC_FRR_TaskA_group(:,:,subji)  = BSC_FRR_TaskA;
     BSC_FRR_TaskB_group(:,:,subji)  = BSC_FRR_TaskB;
     BSC_FRR_TaskA_vs_TaskB_group(:,:,subji)  = BSC_FRR_TaskA_vs_TaskB;
-    rmdir([stat_path filesep exp_folder filesep 'GLMs' filesep 'Sub_' num2str(subji,'%.3d') filesep  'GLMsingle_cHRF'],'s');
+    %rmdir([stat_path filesep exp_folder filesep 'GLMs' filesep 'Sub_' num2str(subji,'%.3d') filesep  'GLMsingle_cHRF'],'s');
 end
 save([stat_path filesep exp_folder filesep 'group_stat' filesep 'BSC_FRR.mat'],'BSC*');
 time = toc;

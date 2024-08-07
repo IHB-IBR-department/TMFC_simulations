@@ -1,5 +1,10 @@
 function BSC_FRR_FIR(stat_path,sots_path,exp_folder,N,TR,q_level,ground_truth)
 
+% ========================================================================
+% Ruslan Masharipov, July, 2024
+% email: ruslan.s.masharipov@gmail.com
+% ========================================================================
+
 tic
 
 % Number of *.nii images per subject
