@@ -4,7 +4,7 @@ Repository for code and simulations from  <br/>
 **"Comparison of whole-brain task-modulated functional connectivity methods for fMRI task connectomics"** <br/>
 by Masharipov, R., Knyazeva, I., Korotkov, A., Cherednichenko, D. &amp; Kireev, M.
 
-Use the repository [Discussions](https://github.com/Masharipov/TMFC_simulations/discussions) for questions or email masharipov@ihb.spb.ru
+Use the repository [Discussions](https://github.com/IHB-IBR-department/TMFC_simulations/discussions) for questions or email masharipov@ihb.spb.ru
 
 ## Overview
 
