@@ -74,7 +74,7 @@ load(sots_path);
 onsets{1,1} = onsets{1,1} - STP_delay;
 onsets{1,2} = onsets{1,2} - STP_delay;
 sots_path = sots_path(1:end-4);
-sots_path = join([sots_path '_[' num2str(STP_delay,'%.2f') 's_STP].mat'],1);
+sots_path = [sots_path '_[' num2str(data.STP_delay,'%.2f') 's_STP].mat'];
 save(sots_path,'activations','onsets','durations','names','rest_matrix','task_matrices');
 
 %% Generate .nii functional images for SPM estimate
