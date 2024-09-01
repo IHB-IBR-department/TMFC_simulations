@@ -15,11 +15,11 @@ clear
 stat_path = 'C:\TMFC_simulations\experiments\27_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[200_TRIALS]_ASYMMETRIC';
 
 % Set path for Wilson-Cowan (WC) simulations .mat file
-sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\SIM_BOLD_27_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[200_TRIALS]_ASYMMETRIC.mat';
+sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\files\SIM_BOLD_27_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[200_TRIALS]_ASYMMETRIC.mat';
 
 % Set path for task design *.mat file (stimulus onset times, SOTs)
 % Simular to the multiple condition *.mat file used in SPM 12
-sots_path = 'C:\TMFC_simulations\task_designs\27_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[200_TRIALS]_ASYMMETRIC.mat';
+sots_path = 'C:\TMFC_simulations\task_designs\files\27_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[200_TRIALS]_ASYMMETRIC.mat';
 
 % Asymmetric ground truth matrix
 load('C:\TMFC_simulations\matlab_code\ground_truth_asymm_matrix.mat');

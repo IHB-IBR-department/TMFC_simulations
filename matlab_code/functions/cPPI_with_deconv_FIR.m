@@ -48,15 +48,19 @@ time = toc;
 fprintf(['Merge cPPI_with_Deconv matrices :: Done in: ' num2str(time) 's \n']); 
 
 %% Results: cPPI with Deconv
-figure
 [cPPI_WD_TaskA_vs_TaskB_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(cPPI_WD_TaskA_vs_TaskB,q_level);
 gm_cPPI_WD_TaskA_vs_TaskB = mean(cPPI_WD_TaskA_vs_TaskB,3);
 gm_cPPI_WD_TaskA_vs_TaskB(1:1+size(gm_cPPI_WD_TaskA_vs_TaskB,1):end) = 1;
 
+figure
+try
+    sgtitle('cPPI with Deconvolution (After FIR task regression)')
+catch
+    suptitle('cPPI with Deconvolution (After FIR task regression)')
+end
 subplot(121); imagesc(gm_cPPI_WD_TaskA_vs_TaskB);  title('cPPI Task AvsB');      axis square; caxis(max_ax(gm_cPPI_WD_TaskA_vs_TaskB,1));
 subplot(122); imagesc(cPPI_WD_TaskA_vs_TaskB_FDR); title('cPPI Task AvsB FDR');  axis square; 
 
-sgtitle('cPPI with Deconvolution (After FIR task regression)')
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 colormap('redblue')
 colormap(subplot(122),'parula') 

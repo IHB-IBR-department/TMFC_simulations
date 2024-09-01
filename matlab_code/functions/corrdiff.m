@@ -74,6 +74,11 @@ gm_corrdiff_TaskA_vs_TaskB(1:1+size(gm_corrdiff_TaskA_vs_TaskB,1):end) = 0;
 corrdiff_TaskA_vs_TaskB_FDR(1:1+size(corrdiff_TaskA_vs_TaskB_FDR,1):end) = 0;
 
 figure
+try
+    sgtitle('Direct correlation difference')
+catch
+    suptitle('Direct correlation difference')
+end
 subplot(241); imagesc(mean(corrdiff_Rest,3)); title('Rest');  axis square; caxis(max_ax(mean(corrdiff_Rest,3),1));
 subplot(242); imagesc(mean(corrdiff_TaskA,3)); title('Task A');  axis square; caxis(max_ax(mean(corrdiff_TaskA,3),1));
 subplot(243); imagesc(mean(corrdiff_TaskB,3)); title('Task B');  axis square; caxis(max_ax(mean(corrdiff_TaskB,3),1));
@@ -83,7 +88,6 @@ subplot(246); imagesc(corrdiff_TaskA_FDR); title('Task A FDR');  axis square;
 subplot(247); imagesc(corrdiff_TaskB_FDR); title('Task B FDR');  axis square; 
 subplot(248); imagesc(corrdiff_TaskA_vs_TaskB_FDR); title('Task AvsB FDR');  axis square;
 
-sgtitle('Direct correlation difference')
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 colormap('redblue') 
 colormap(subplot(245),'parula') 

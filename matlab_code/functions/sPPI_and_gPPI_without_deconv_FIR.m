@@ -98,13 +98,17 @@ sPPI_WoD_TaskA_vs_TaskB_asymm_FDR(1:1+size(sPPI_WoD_TaskA_vs_TaskB_asymm_FDR,1):
 sPPI_WoD_TaskA_vs_TaskB_symm_FDR(1:1+size(sPPI_WoD_TaskA_vs_TaskB_symm_FDR,1):end) = 0;
 
 figure
+try
+    sgtitle('sPPI without Deconvolution (After FIR task regression)')
+catch
+    suptitle('sPPI without Deconvolution (After FIR task regression)')
+end
 subplot(231); imagesc(gm_sPPI_WoD_TaskIndep_asymm);       title('TaskIndep asymm');      axis square; caxis(max_ax(gm_sPPI_WoD_TaskIndep_asymm,1));          
 subplot(232); imagesc(gm_sPPI_WoD_TaskA_vs_TaskB_asymm);  title('Task AvsB asymm');      axis square; caxis(max_ax(gm_sPPI_WoD_TaskA_vs_TaskB_asymm,1)); 
 subplot(233); imagesc(sPPI_WoD_TaskA_vs_TaskB_asymm_FDR); title('Task AvsB asymm FDR');  axis square; 
 subplot(234); imagesc(gm_sPPI_WoD_TaskIndep_symm);        title('TaskIndep symm');       axis square; caxis(max_ax(gm_sPPI_WoD_TaskIndep_symm,1));           
 subplot(235); imagesc(gm_sPPI_WoD_TaskA_vs_TaskB_symm);   title('Task AvsB symm');       axis square; caxis(max_ax(gm_sPPI_WoD_TaskA_vs_TaskB_symm,1));  
 subplot(236); imagesc(sPPI_WoD_TaskA_vs_TaskB_symm_FDR);  title('Task AvsB symm FDR');   axis square; 
-sgtitle('sPPI without Deconvolution (After FIR task regression)')
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 colormap('redblue')
 colormap(subplot(233),'parula') 
@@ -114,7 +118,6 @@ sPPI_WoD_symmetry = check_symmetry(mean(sPPI_WoD_TaskA_vs_TaskB_asymm,3));
 fprintf(['sPPI without deconvolution symmetry :: r = ' num2str(sPPI_WoD_symmetry) ' \n']);
 
 %% Results: gPPI without Deconv
-figure
 [gPPI_WoD_TaskA_vs_TaskB_asymm_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(gPPI_WoD_TaskA_vs_TaskB_asymm,q_level);
 [gPPI_WoD_TaskA_vs_TaskB_symm_FDR Nsig_FDR pval tval matrix_uncorr001 Nsig_uncorr001] = network_onesample_ttest(gPPI_WoD_TaskA_vs_TaskB_symm,q_level);
 gm_gPPI_WoD_TaskIndep_asymm = mean(gPPI_WoD_TaskIndep_asymm,3);
@@ -128,6 +131,12 @@ gm_gPPI_WoD_TaskA_vs_TaskB_symm(1:1+size(gm_gPPI_WoD_TaskA_vs_TaskB_symm,1):end)
 gPPI_WoD_TaskA_vs_TaskB_asymm_FDR(1:1+size(gPPI_WoD_TaskA_vs_TaskB_asymm_FDR,1):end) = 0;
 gPPI_WoD_TaskA_vs_TaskB_symm_FDR(1:1+size(gPPI_WoD_TaskA_vs_TaskB_symm_FDR,1):end) = 0;
 
+figure
+try
+    sgtitle('gPPI without Deconvolution (After FIR task regression)')
+catch
+    suptitle('gPPI without Deconvolution (After FIR task regression)')
+end
 subplot(251); imagesc(gm_gPPI_WoD_TaskIndep_asymm);         title('TaskIndep asymm');      axis square; caxis(max_ax(gm_gPPI_WoD_TaskIndep_asymm,1));
 subplot(252); imagesc(mean(gPPI_WoD_TaskA_asymm,3));        title('Task A asymm');         axis square; caxis(max_ax(mean(gPPI_WoD_TaskA_asymm,3),1));
 subplot(253); imagesc(mean(gPPI_WoD_TaskB_asymm,3));        title('Task B asymm');         axis square; caxis(max_ax(mean(gPPI_WoD_TaskB_asymm,3),1));
@@ -138,7 +147,6 @@ subplot(257); imagesc(mean(gPPI_WoD_TaskA_symm,3));         title('Task A symm')
 subplot(258); imagesc(mean(gPPI_WoD_TaskB_symm,3));         title('Task B symm');          axis square; caxis(max_ax(mean(gPPI_WoD_TaskB_symm,3),1));
 subplot(259); imagesc(gm_gPPI_WoD_TaskA_vs_TaskB_symm);     title('Task AvsB symm');       axis square; caxis(max_ax(gm_gPPI_WoD_TaskA_vs_TaskB_symm,1));
 subplot(2,5,10); imagesc(gPPI_WoD_TaskA_vs_TaskB_symm_FDR); title('Task AvsB symm FDR');   axis square;
-sgtitle('gPPI without Deconvolution (After FIR task regression)')
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 colormap('redblue')
 colormap(subplot(255),'parula') 

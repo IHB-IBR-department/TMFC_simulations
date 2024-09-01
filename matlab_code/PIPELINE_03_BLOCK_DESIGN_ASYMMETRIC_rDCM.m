@@ -15,11 +15,11 @@ clear
 stat_path = 'C:\TMFC_simulations\experiments\25_BLOCK_[2s_TR]_[20s_DUR]_[20_BLOCKS]_ASYMMETRIC';
 
 % Set path for Wilson-Cowan (WC) simulations .mat file
-sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\SIM_BOLD_25_BLOCK_[2s_TR]_[20s_DUR]_[20_BLOCKS]_ASYMMETRIC.mat';
+sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\files\SIM_BOLD_25_BLOCK_[2s_TR]_[20s_DUR]_[20_BLOCKS]_ASYMMETRIC.mat';
 
 % Set path for task design *.mat file (stimulus onset times, SOTs)
 % Simular to the multiple condition *.mat file used in SPM 12
-sots_path = 'C:\TMFC_simulations\task_designs\25_BLOCK_[2s_TR]_[20s_DUR]_[20_BLOCKS]_ASYMMETRIC.mat';
+sots_path = 'C:\TMFC_simulations\task_designs\files\25_BLOCK_[2s_TR]_[20s_DUR]_[20_BLOCKS]_ASYMMETRIC.mat';
 
 % Asymmetric ground truth matrix
 load('C:\TMFC_simulations\matlab_code\ground_truth_asymm_matrix.mat');
@@ -213,7 +213,11 @@ rDCM_TaskA_FDR(1:1+size(rDCM_TaskA_FDR,1):end) = 0;
 rDCM_TaskB_FDR(1:1+size(rDCM_TaskB_FDR,1):end) = 0;
 rDCM_TaskA_vs_TaskB_FDR(1:1+size(rDCM_TaskA_vs_TaskB_FDR,1):end) = 0;
 
-figure
+try
+    sgtitle('rDCM')
+catch
+    suptitle('rDCM')
+end
 subplot(241); imagesc(Rest); title('Rest');  axis square; 
 subplot(242); imagesc(TaskA); title('Task A');  axis square; 
 subplot(243); imagesc(TaskB); title('Task B');  axis square; 
@@ -223,7 +227,6 @@ subplot(246); imagesc(rDCM_TaskA_FDR); title('Task A FDR');  axis square;
 subplot(247); imagesc(rDCM_TaskB_FDR); title('Task B FDR');  axis square; 
 subplot(248); imagesc(rDCM_TaskA_vs_TaskB_FDR); title('Task AvsB FDR');  axis square; 
 
-sgtitle('rDCM')
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 colormap('redblue') 
 colormap(subplot(245),'parula')

@@ -19,4 +19,4 @@ for i = 1:N_ROIs
 end
 
 time = toc;
-fprintf(['Generate ROI masks :: ' exp_folder ' :: Done in ' num2str(time)  filesep 'n']);
+fprintf(['Generate ROI masks :: ' exp_folder ' :: Done in ' num2str(time)  '\n']);

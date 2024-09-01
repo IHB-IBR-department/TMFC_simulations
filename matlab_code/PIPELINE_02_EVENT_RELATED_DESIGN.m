@@ -18,11 +18,11 @@ clear
 stat_path = 'C:\TMFC_simulations\experiments\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS]';
 
 % Set path for simulated BOLD time series *.mat file
-sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\SIM_BOLD_02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
+sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\files\SIM_BOLD_02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
 
 % Set path for task design *.mat file (stimulus onset times, SOTs)
 % Simular to the multiple condition *.mat file used in SPM 12
-sots_path = 'C:\TMFC_simulations\task_designs\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
+sots_path = 'C:\TMFC_simulations\task_designs\files\02_EVENT_[2s_TR]_[1s_DUR]_[6s_ISI]_[100_TRIALS].mat';
 
 % Symmetric ground truth matrix
 load('C:\TMFC_simulations\matlab_code\ground_truth_symm_matrix.mat');
@@ -162,7 +162,7 @@ BSC_FRR(stat_path,sots_path,exp_folder,N,TR,q_level,ground_truth)
 BSC_FRR_FIR(stat_path,sots_path,exp_folder,N,TR,q_level,ground_truth)
 
 %% Task-state FC and Background FC
-TSFC_BGFC(stat_path,exp_folder,N,N_ROIs)
+TSFC_BGFC(stat_path,exp_folder,N)
 
 %% TMFC results 
 % (Plot all figures for a given q-level)
@@ -172,7 +172,7 @@ event_related_results(stat_path,exp_folder,q_level,ground_truth)
 
 %% TMFC results after FIR task regression 
 % (Plot all figures for a given q-level)
-q_level = 0.05/2;
+q_level = 0.001/2;
 event_related_results_FIR(stat_path,exp_folder,q_level,ground_truth)
 
 

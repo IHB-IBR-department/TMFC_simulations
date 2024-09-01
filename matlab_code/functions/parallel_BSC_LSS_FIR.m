@@ -118,14 +118,17 @@ gm_BSC_LSS_TaskA_vs_TaskB(1:1+size(gm_BSC_LSS_TaskA_vs_TaskB,1):end) = 0;
 BSC_LSS_TaskA_vs_TaskB_group_FDR(1:1+size(BSC_LSS_TaskA_vs_TaskB_group_FDR,1):end) = 0;
 
 figure
+try
+    sgtitle('Beta-series correlations: LSS approach (After FIR task regression)')
+catch
+    suptitle('Beta-series correlations: LSS approach (After FIR task regression)')
+end
 subplot(231); imagesc(mean(BSC_LSS_TaskA_group,3)); title('LSS TaskA');       axis square; caxis(max_ax(mean(BSC_LSS_TaskA_group,3),1));
 subplot(232); imagesc(mean(BSC_LSS_TaskB_group,3)); title('LSS TaskB');       axis square; caxis(max_ax(mean(BSC_LSS_TaskB_group,3),1));
 subplot(233); imagesc(gm_BSC_LSS_TaskA_vs_TaskB);   title('LSS TaskAvsB');    axis square; caxis(max_ax(gm_BSC_LSS_TaskA_vs_TaskB,1));
 subplot(234); imagesc(BSC_LSS_TaskA_group_FDR);     title('LSS Task A FDR');  axis square; 
 subplot(235); imagesc(BSC_LSS_TaskB_group_FDR);     title('LSS Task B FDR');  axis square; 
 subplot(236); imagesc(BSC_LSS_TaskA_vs_TaskB_group_FDR); title('LSS Task AvsB FDR');  axis square; 
-
-sgtitle('Beta-series correlations: LSS approach (After FIR task regression)')
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 colormap('redblue')
 colormap(subplot(234),'parula') 

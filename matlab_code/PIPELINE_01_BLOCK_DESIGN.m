@@ -14,11 +14,11 @@ clear
 stat_path = 'C:\TMFC_simulations\experiments\01_BLOCK_[2s_TR]_[20s_DUR]_[10_BLOCKS]';
 
 % Set path for simulated BOLD time series *.mat file
-sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\SIM_BOLD_01_BLOCK_[2s_TR]_[20s_DUR]_[10_BLOCKS].mat';
+sim_path = 'C:\TMFC_simulations\simulated_BOLD_time_series\files\SIM_BOLD_01_BLOCK_[2s_TR]_[20s_DUR]_[10_BLOCKS].mat';
 
 % Set path for task design *.mat file (stimulus onset times, SOTs)
 % Simular to the multiple condition *.mat file used in SPM 12
-sots_path = 'C:\TMFC_simulations\task_designs\01_BLOCK_[2s_TR]_[20s_DUR]_[10_BLOCKS].mat';
+sots_path = 'C:\TMFC_simulations\task_designs\files\01_BLOCK_[2s_TR]_[20s_DUR]_[10_BLOCKS].mat';
 
 % Symmetric ground truth matrix
 load('C:\TMFC_simulations\matlab_code\ground_truth_symm_matrix.mat');
@@ -143,7 +143,7 @@ corrdiff(stat_path,sots_path,exp_folder,N,TR,q_level,ground_truth)
 corrdiff_FIR(stat_path,sots_path,exp_folder,N,TR,q_level,ground_truth)
 
 %% Task-state FC and Background FC
-TSFC_BGFC(stat_path,exp_folder,N,N_ROIs)
+TSFC_BGFC(stat_path,exp_folder,N)
 
 %% TMFC results 
 % (Plot all figures for a given q-level)

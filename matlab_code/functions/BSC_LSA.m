@@ -107,14 +107,17 @@ gm_BSC_LSA_TaskA_vs_TaskB(1:1+size(gm_BSC_LSA_TaskA_vs_TaskB,1):end) = 0;
 BSC_LSA_TaskA_vs_TaskB_group_FDR(1:1+size(BSC_LSA_TaskA_vs_TaskB_group_FDR,1):end) = 0;
 
 figure
+try
+    sgtitle('Beta-series correlations: LSA approach')
+catch
+    suptitle('Beta-series correlations: LSA approach')
+end
 subplot(231); imagesc(mean(BSC_LSA_TaskA_group,3)); title('LSA Task A');      axis square; caxis(max_ax(mean(BSC_LSA_TaskA_group,3),1));
 subplot(232); imagesc(mean(BSC_LSA_TaskB_group,3)); title('LSA Task B');      axis square; caxis(max_ax(mean(BSC_LSA_TaskB_group,3),1));
 subplot(233); imagesc(gm_BSC_LSA_TaskA_vs_TaskB);   title('LSA Task AvsB');   axis square; caxis(max_ax(gm_BSC_LSA_TaskA_vs_TaskB,1));
 subplot(234); imagesc(BSC_LSA_TaskA_group_FDR);     title('LSA Task A FDR');  axis square; 
 subplot(235); imagesc(BSC_LSA_TaskB_group_FDR);     title('LSA Task B FDR');  axis square; 
 subplot(236); imagesc(BSC_LSA_TaskA_vs_TaskB_group_FDR); title('LSA Task AvsB FDR');  axis square; 
-
-sgtitle('Beta-series correlations: LSA approach')
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 colormap('redblue')
 colormap(subplot(234),'parula') 

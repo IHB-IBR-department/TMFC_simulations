@@ -24,4 +24,4 @@ for i = 1:N
 end
 
 time = toc;
-fprintf(['Generate images :: ' exp_folder ' :: Done in ' num2str(time)  filesep 'n']);
+fprintf(['Generate images :: ' exp_folder ' :: Done in ' num2str(time)  '\n']);
