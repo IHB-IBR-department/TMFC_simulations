@@ -74,24 +74,37 @@ group_mean_amp_diff1 = mean(mean(amp_diff_up1));
 group_mean_amp_diff2 = mean(mean(amp_diff_up2));
 
 %% Plot FC matrices and amplitude differences
-ax = 0.3;
-
-f1 = figure(1);
-f1.Position = [400 250 800 250]; 
-subplot(131); imagesc(mean(FCcorr1,3)); title('Correlation'); axis square; caxis([-ax ax]); xticks([1 15 30]); yticks([1 15 30]); colorbar
-subplot(132); imagesc(mean(FCreg1,3)); title('Regression'); axis square; caxis([-ax ax]); xticks([1 15 30]); yticks([1 15 30]); colorbar
-subplot(133); imagesc(mean(amp_diff1,3)); title('Amplitude differences'); axis square; caxis([-ax ax]); xticks([1 15 30]); yticks([1 15 30]); colorbar
-sgtitle('Without amplitude differences')
-colormap('turbo')
+max_ax = 0.3;
+figure('Position', [400 250 800 250])
+subplot(131); imagesc(mean(FCcorr1,3));   title('Correlation'); axis square; caxis([-max_ax max_ax]); set(gca,'XTick',[1 15 30], 'YTick', [1 15 30]); colorbar
+subplot(132); imagesc(mean(FCreg1,3));    title('Regression');  axis square; caxis([-max_ax max_ax]); set(gca,'XTick',[1 15 30], 'YTick', [1 15 30]); colorbar
+subplot(133); imagesc(mean(amp_diff1,3)); title('Amplitude differences'); axis square; caxis([-max_ax max_ax]); set(gca,'XTick',[1 15 30], 'YTick', [1 15 30]); colorbar
+try
+    sgtitle('Without amplitude differences')
+catch
+    suptitle('Without amplitude differences')
+end
+try
+    colormap('turbo')
+catch
+    colormap('jet')
+end
 movegui('center')
 
-f2 = figure(2);
-f2.Position = [400 250 800 250]; 
-subplot(131); imagesc(mean(FCcorr2,3)); title('Correlation'); axis square; caxis([-ax ax]); xticks([1 15 30]); yticks([1 15 30]); colorbar
-subplot(132); imagesc(mean(FCreg2,3)); title(['Regression']); axis square; caxis([-ax ax]); xticks([1 15 30]); yticks([1 15 30]); colorbar
-subplot(133); imagesc(mean(amp_diff2,3)); title('Amplitude differences'); axis square; caxis([-ax ax]); xticks([1 15 30]); yticks([1 15 30]); colorbar
-sgtitle('With amplitude differences')
-colormap('turbo')
+figure('Position', [400 250 800 250])
+subplot(131); imagesc(mean(FCcorr2,3)); title('Correlation'); axis square; caxis([-max_ax max_ax]); set(gca,'XTick',[1 15 30], 'YTick', [1 15 30]); colorbar
+subplot(132); imagesc(mean(FCreg2,3)); title(['Regression']); axis square; caxis([-max_ax max_ax]); set(gca,'XTick',[1 15 30], 'YTick', [1 15 30]); colorbar
+subplot(133); imagesc(mean(amp_diff2,3)); title('Amplitude differences'); axis square; caxis([-max_ax max_ax]); set(gca,'XTick',[1 15 30], 'YTick', [1 15 30]); colorbar
+try
+    sgtitle('Without amplitude differences')
+catch
+    suptitle('Without amplitude differences')
+end
+try
+    colormap('turbo')
+catch
+    colormap('jet')
+end
 movegui('center')
 
 group_symm1 = check_symmetry(mean(FCreg1,3));
@@ -100,10 +113,14 @@ fprintf(['Correlation between upper and lower diagonal elements WITHOUT amplitud
 fprintf(['Correlation between upper and lower diagonal elements WITH amplitude differences: r = ' num2str(group_symm2,'%4.2f') ' \n']);
 
 %% Plot histograms 
-figure(3)
-subplot(121); histogram(amp_diff_and_FCreg_diff1,7); xlim([-1, 1]); title(['Without ampl. diff. Mean r = ' num2str(mean(amp_diff_and_FCreg_diff1),'%4.2f')]); axis square; 
-subplot(122); histogram(amp_diff_and_FCreg_diff2,7); xlim([-1, 1]); title(['With ampl. diff. Mean r = ' num2str(mean(amp_diff_and_FCreg_diff2),'%4.2f')]); axis square; 
-sgtitle({'Correlations between amplitude differences','and regression coefficient differences across ROIs'})
+figure
+subplot(121); hist(amp_diff_and_FCreg_diff1,7); set(gca,'XTick',[-1 1]); title(['Without ampl. diff. Mean r = ' num2str(mean(amp_diff_and_FCreg_diff1),'%4.2f')]); axis square; 
+subplot(122); hist(amp_diff_and_FCreg_diff2,7); set(gca,'XTick',[-1 1]); title(['With ampl. diff. Mean r = ' num2str(mean(amp_diff_and_FCreg_diff2),'%4.2f')]); axis square; 
+try
+    sgtitle({'Correlations between amplitude differences','and regression coefficient differences across ROIs'})
+catch
+    suptitle({'Correlations between amplitude differences','and regression coefficient differences across ROIs'})
+end
 movegui('center')
 
 
